@@ -1,2 +1,4 @@
 # 10_ZhouMingzheng
-大数据分析实践Climbers组的repository，用于小组作业、中期报告、终期报告（项目、论文、PPT）的提交
+### 组名 Climbers
+### 小组成员
+#### 周明政 张欣悦 雷舒扬 王凡灏 马雨慧
