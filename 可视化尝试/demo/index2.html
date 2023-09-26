@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!--draw the graph completely-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <!--import d3 version 5-->
+    <script type="text/javascript" src="libs/d3.min.js"></script>
+    <!--import jquery3.3.1-->
+    <script type="text/javascript" src="libs/jquery-3.7.1.js"></script>
+</head>
+<body>
+    <svg></svg>
+    <script>
+        //get json file
+        d3.json("MC1.json").then(function(dataJson){
+
+            //找到和Mar de la Vida OJSC有关的顶点以及边
+
+
+            //GroupExplorer constructing function
+            //this is one way to create a javascript object
+            // console.log(dataJson);
+            function GroupExplorer(data){
+                //create an object-include some data
+                //this is an another way to create a javascript object
+                var defaultConfig = {
+                    data:{"nodes":[],"links":[]},//critical data set
+                    windowWidth:window.innerWidth,
+                    windowHeight:window.innerHeight,
+                    defaultLinkDistance:2500
+                }
+
+                
+                // console.log(data.links);
+
+                // function getNeighbors(nodeId) {
+                // return data.links.filter(link =>
+                //     link.source === nodeId || link.target === nodeId
+                //     ).map(link =>
+                //         link.source === nodeId ? link.target : link.source
+                //     );
+                // }
+
+                // let selectedNodeId = "Mar de la Vida OJSC";
+                // let neighbors = getNeighbors(selectedNodeId);
+
+                //because the initial "data" is null,
+                //so you need use jquery syntax "extend" to merge the json data
+                //below,merge "data" into "defaultWindow"
+                //"true" mean do not cover
+                //details see jquery API document
+                $.extend(true,defaultConfig,data);
+
+                //so now we get the json file that we need
+                //now let`s begin,transform json file to force graph data
+                //but first ,we need to get "svg"
+                var svg = d3.select("svg");
+                svg.attr("width",defaultConfig.windowWidth);
+                svg.attr("height",defaultConfig.windowHeight);
+                
+
+                defaultConfig.data.links.forEach(function(e){
+                    //if(typeof e.source=="number"&&typeof e.target=="number"){
+                        var sourceNode = defaultConfig.data.nodes.filter(function(n){
+                            return n.id === e.source;
+                        })[0];
+                        var targetNode = defaultConfig.data.nodes.filter(function(n){
+                            return n.id === e.target;
+                        })[0];
+                        e.source = sourceNode;
+                        e.target = targetNode;
+                    //}
+                });
+
+                function getNeighbors(nodeId)
+                {
+                    return defaultConfig.data.links.filter(function(e){
+                        return e.source.id === nodeId||e.target.id === nodeId;
+                    }).map(
+                        e =>
+                        e.source.id === nodeId ? e.target : e.source
+                    );
+                }
+
+                function getLinks(nodes)
+                {
+                    return defaultConfig.data.links.filter(function(e){
+
+                        let in1 = false;
+                        let in2 = false;
+                        for(let i=0;i<nodes.length;++i)
+                        {
+                            if(e.source == nodes[i])
+                                in1 = true;
+                            if(e.target == nodes[i])
+                                in2 = true;
+                            if(in1 && in2)
+                                return e;
+                        }
+                        
+                    });
+                }
+
+                let selectedNodeId = "Mar de la Vida OJSC";
+                let neighbors = getNeighbors(selectedNodeId);
+                let selectNode = defaultConfig.data.nodes.filter(function(n){
+                    return n.id === selectedNodeId;
+                });
+
+                
+                neighbors.push(selectNode[0]);
+                let subLinks = getLinks(neighbors);
+                console.log(neighbors);     //这是相关的顶点
+                console.log(subLinks);
+                console.log(selectNode);
+
+                //提取顶点的types，不同类型的顶点用不同的颜色绘制
+                var ontologySet = new Set()
+                defaultConfig.data.nodes.forEach(n => 
+                ontologySet.add(n.type))
+                let ontologyList = [...ontologySet]
+                ontologyList = ontologyList.filter(item=>!["",null,undefined,NaN,false,true].includes(item));
+                console.log(ontologyList)
+
+                //设置颜色比例尺
+                var colorScale = d3.scaleOrdinal(d3.schemeSpectral)
+    		     .domain(d3.range(ontologyList.length))
+    		     //.range([0,]);
+                let scale = d3.scaleLinear().domain([0,ontologyList.length+2]).range([0,1])
+
+                var colorBar = ["#99cccc","#336633","#cc0033","#ccccff","#0099cc","#cccccc","#ffff99","#99cc66"];
+            //create a force graph
+                var forceSimulation = d3.forceSimulation()
+                    .force("link",d3.forceLink())
+                    .force("charge",d3.forceManyBody())
+                    .force("center",d3.forceCenter(defaultConfig.windowWidth/2,defaultConfig.windowHeight/2));
+
+                //transform nodes data
+                forceSimulation.nodes(neighbors)
+                    .on("tick",ticked);
+                //tranform links data
+                forceSimulation.force("link")
+                    .links(subLinks)
+                    .distance(defaultConfig.defaultLinkDistance/10);
+
+                // console.log(defaultConfig.data.nodes);
+                // console.log(defaultConfig.data.links);
+
+                
+
+                //define arrow
+                svg.append("svg:defs")
+                    .append("svg:marker")
+                    .attr("id", "marker")
+                    .attr('viewBox', '0 -5 10 10')
+                    .attr("refX", 20)
+                    .attr("refY",0)
+                    .attr('markerWidth', 10)
+                    .attr('markerHeight', 10)
+                    .attr('orient', 'auto')
+                    .append('svg:path')
+                    .attr('d', 'M0,-5L10,0L0,5')
+                    .attr("fill","brown");
+                //draw links
+                var links = svg.append("g")
+                    .selectAll("line")
+                    //.data(defaultConfig.data.links)
+                    .data(subLinks)
+                    .enter()
+                    .append("line")
+                    .attr("x1",function(n){return n.source.x})
+                    .attr("y1",function(n){return n.source.y})
+                    .attr("x2",function(n){return n.target.x})
+                    .attr("y2",function(n){return n.target.y})
+                    .attr("stroke","brown")
+                    .attr("stroke-width",1)
+                    .attr("marker-end","url(#marker)");
+                //draw links-text
+                var links_text = svg.append("g")
+                    .selectAll("text")
+                    //.data(defaultConfig.data.links)
+                    .data(subLinks)
+                    .enter()
+                    .append("text")
+                    .attr("x",function(e){
+                        return (e.source.x+e.target.x)/2;
+                    })
+                    .attr("y",function(e){
+                        // console.log(e.source.y+"+"+e.target.y)
+                        return (e.source.y+e.target.y)/2;
+                    })
+                    .attr("font-size",10)
+                    .text(function(e){return e.type});
+                //draw nodes group = node+node-text
+                var nodes_g = svg.append("g")
+                    .selectAll("g")
+                    //.data(defaultConfig.data.nodes)
+                    .data(neighbors)
+                    .enter()
+                    .append("g")
+                    .attr("transform",function(e){
+                        return "translate("+e.x+","+e.y+")";
+                    })
+                    .call(d3.drag()
+                        .on("start",started)
+                        .on("drag",dragged)
+                        .on("end",ended));
+                //draw nodes
+                nodes_g.append("circle")
+                    .attr("r",10)
+                    .attr("fill",function(n){
+                        if(n.id == selectedNodeId)
+                            return "yellow";
+                        for(let i=0;i<ontologyList.length;++i){
+                            if(n.type == ontologyList[i])
+                            {
+                                return colorBar[i];
+                            }
+                        }
+                    });
+                //draw node-text
+                nodes_g.append("text")
+                    .attr("x",-15)
+                    .attr("y",20)
+                    .attr("font-size",10)
+                    .text(function(e){return e.name});
+
+                function started(d){
+                    if(!d3.event.active){
+                        forceSimulation.alphaTarget(0.8).restart();
+                    }
+                    d.fx = d.x;
+                    d.fy = d.y;
+                }
+                function dragged(d){
+                    d.fx = d3.event.x;
+                    d.fy = d3.event.y;
+                }
+                function ended(d) {
+                    if(!d3.event.active){
+                        forceSimulation.alphaTarget(0);
+                    }
+                    d.fx = null;
+                    d.fy = null;
+                }
+
+                function ticked(){
+                    links
+                        .attr("x1",function(n){return n.source.x})
+                        .attr("y1",function(n){return n.source.y})
+                        .attr("x2",function(n){return n.target.x})
+                        .attr("y2",function(n){return n.target.y})
+                    links_text
+                        .attr("x",function(e){
+                            return (e.source.x+e.target.x)/2;
+                        })
+                        .attr("y",function(e){
+                            return (e.source.y+e.target.y)/2;
+                        })
+                    nodes_g
+                        .attr("transform",function(e){
+                            return "translate("+e.x+","+e.y+")";
+                        })
+                }
+
+            }
+            //because in the way of creating a javascript object,
+            //you need to use "new" to use it
+            new GroupExplorer({data:dataJson});
+        })
+    </script>
+</body>
+</html>
