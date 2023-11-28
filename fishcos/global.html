@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="stylesheet" href="../style/global.css" />
+    <meta charset="utf-8" />
+    <title>ECharts</title>
+    <script src="js/echarts.js"></script>
+    <script src="js/vintage.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  </head>
+  <body>
+    <header id="header">
+      <h1 id="appname">Fishcos</h1>
+      <img src="../image/fish.png" alt="logo" id="logo" />
+      <nav>
+        <ul id="modeMenu">
+          <li id="home" class="mode"><a href="./home.html">Home</a></li>
+          <li id="globalView" class="mode">
+            <a href="./global.html">Global</a>
+          </li>
+          <li id="ndoeView" class="mode"><a href="./node.html">Node</a></li>
+          <li id="susView" class="mode">
+            <a href="./suspect.html">Suspect</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+        <div class="column">
+            <!-- 第1个图表：世界大学排名 Top 10得分 -->
+            <div
+              id="rank"
+              class="chart-container"
+              style="width: 95%; height: 300px"
+            ></div>
+            <script>
+              var chart = echarts.init(document.getElementById("rank"));
+              chart.setOption({
+                title: {
+                  text: "",
+                },
+                tooltip: {
+                  trigger: "axis",
+                  axisPointer: {
+                    type: "shadow",
+                  },
+                },
+                xAxis: {
+                  type: "category",
+                  data: [
+                    "Harvard University",
+                    "Massachusetts Institute of Technology",
+                    "Stanford University",
+                    "University of Cambridge",
+                    "California Institute of Technology",
+                    "Princeton University",
+                    "University of Oxford",
+                    "Yale University",
+                    "Columbia University",
+                    "University of California, Berkeley",
+                  ],
+                  axisLabel: {
+                    interval: 0, // x 轴标签全部显示
+                    rotate: 45, // 标签旋转角度
+                    textStyle: {
+                      fontSize: 10, // 标签字体大小
+                    },
+                  },
+                },
+                yAxis: {
+                  type: "value",
+                  name: "Score", // y 轴名称
+                  nameTextStyle: {
+                    fontSize: 12,
+                  },
+                },
+                series: [
+                  {
+                    name: "Score",
+                    type: "bar",
+                    data: [
+                      100, 91.67, 89.5, 86.17, 85.21, 82.5, 82.34, 79.14, 78.86,
+                      78.55,
+                    ],
+                    itemStyle: {
+                      color: function (params) {
+                        var colorList = [
+                          new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            {
+                              offset: 0,
+                              color: "#FFA07A", // 渐变开始的颜色
+                            },
+                            {
+                              offset: 1,
+                              color: "#8A2BE2", // 渐变结束的颜色
+                            },
+                          ]),
+                          // 更多的渐变颜色设置可以继续添加
+                        ];
+                        return colorList[params.dataIndex % colorList.length];
+                      },
+                    },
+                  },
+                ],
+              });
+            </script>
+      
+            <!-- 第2个图表：柱状图 + 折线图 -->
+            <div
+              id="myChart"
+              class="chart-container"
+              style="width: 95%; height: 350px; margin-top: 20px"
+            ></div>
+            <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                // 初始化图表，修正了使用getElementById的参数和变量名
+                var myChart = echarts.init(document.getElementById("myChart"));
+      
+                // 图表配置选项
+                var option = {
+                  // legend: {bottom: 1, },
+                  tooltip: {
+                    trigger: "axis",
+                    showContent: false,
+                  },
+                  dataset: {
+                    source: [
+                      ["product", "2012", "2013", "2014", "2015"],
+                      ["Australia", 2, 2, 27, 27],
+                      ["Canada", 3, 4, 32, 33],
+                      ["China", 0, 0, 84, 83],
+                      ["France", 5, 5, 50, 49],
+                      ["Germany", 3, 2, 55, 55],
+                      ["Italy", 1, 1, 47, 47],
+                      ["Japan", 5, 6, 74, 74],
+                      ["South Korea", 1, 1, 34, 36],
+                      ["Spain", 0, 0, 41, 40],
+                      ["USA", 58, 57, 229, 229],
+                      ["United Kingdom", 8, 7, 64, 65],
+                    ],
+                  },
+                  xAxis: { type: "category" },
+                  yAxis: { gridIndex: 0 },
+                  grid: { top: "55%" },
+                  series: [
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "line",
+                      smooth: true,
+                      seriesLayoutBy: "row",
+                      emphasis: { focus: "series" },
+                    },
+                    {
+                      type: "pie",
+                      id: "pie",
+                      radius: "30%",
+                      center: ["50%", "25%"],
+                      emphasis: { focus: "self" },
+                      label: { formatter: "{b}: {@2012} ({d}%)" },
+                      encode: { itemName: "product", value: "2012", tooltip: "2012" },
+                    },
+                  ],
+                };
+      
+                // 设置图表选项
+                myChart.setOption(option);
+      
+                // 监听事件，更新鼠标指针信息
+                myChart.on("updateAxisPointer", function (event) {
+                  const xAxisInfo = event.axesInfo[0];
+                  if (xAxisInfo) {
+                    const dimension = xAxisInfo.value + 1;
+                    myChart.setOption({
+                      series: {
+                        id: "pie",
+                        label: { formatter: "{b}: {@[" + dimension + "]} ({d}%)" },
+                        encode: { value: dimension, tooltip: dimension },
+                      },
+                    });
+                  }
+                });
+              });
+            </script>
+          </div>
+      
+          <div class="column">
+            <p id="intro" class="chart-container">Global View</p>
+            <!-- 第5个图表：地图还没写 -->
+            <div
+              id="map"
+              class="chart-container"
+              style="width: 100%; height: 300px; margin-top: 20px"
+            ></div>
+            <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+            <script type="text/javascript">
+              var myChart = echarts.init(document.getElementById("map"));
+              var data = [
+                { name: "USA", value: 573 },
+                { name: "China", value: 167 },
+                { name: "Japan", value: 159 },
+                { name: "United Kingdom", value: 144 },
+                { name: "Germany", value: 115 },
+                { name: "France", value: 109 },
+                { name: "Italy", value: 96 },
+                { name: "Spain", value: 81 },
+                { name: "Canada", value: 72 },
+                { name: "South Korea", value: 72 },
+                { name: "Australia", value: 58 },
+                { name: "Taiwan", value: 46 },
+                { name: "Brazil", value: 36 },
+                { name: "India", value: 31 },
+                { name: "Netherlands", value: 29 },
+                { name: "Switzerland", value: 26 },
+                { name: "Sweden", value: 24 },
+                { name: "Austria", value: 24 },
+                { name: "Israel", value: 22 },
+                { name: "Finland", value: 20 },
+                { name: "Turkey", value: 20 },
+                { name: "Belgium", value: 20 },
+                { name: "Poland", value: 18 },
+                { name: "Iran", value: 16 },
+                { name: "Ireland", value: 16 },
+                { name: "Portugal", value: 14 },
+                { name: "Greece", value: 14 },
+                { name: "Hong Kong", value: 12 },
+                { name: "Norway", value: 12 },
+                { name: "New Zealand", value: 12 },
+                { name: "Hungary", value: 12 },
+                { name: "Denmark", value: 12 },
+                { name: "South Africa", value: 10 },
+                { name: "Czech Republic", value: 10 },
+                { name: "Russia", value: 9 },
+                { name: "Saudi Arabia", value: 8 },
+                { name: "Egypt", value: 8 },
+                { name: "Chile", value: 8 },
+                { name: "Argentina", value: 7 },
+                { name: "Thailand", value: 6 },
+                { name: "Malaysia", value: 6 },
+                { name: "Singapore", value: 5 },
+                { name: "Colombia", value: 4 },
+                { name: "Mexico", value: 4 },
+                { name: "Slovenia", value: 4 },
+                { name: "Romania", value: 3 },
+                { name: "Lebanon", value: 2 },
+                { name: "Croatia", value: 2 },
+                { name: "Estonia", value: 2 },
+                { name: "Slovak Republic", value: 2 },
+                { name: "Iceland", value: 2 },
+                { name: "Serbia", value: 2 },
+                { name: "Bulgaria", value: 2 },
+                { name: "Lithuania", value: 2 },
+                { name: "Uganda", value: 2 },
+                { name: "United Arab Emirates", value: 2 },
+                { name: "Uruguay", value: 2 },
+                { name: "Cyprus", value: 2 },
+                { name: "Puerto Rico", value: 2 },
+              ];
+              var option = {
+                title: {
+                  text: "World University Counts Visualization",
+                  left: "center",
+                },
+                tooltip: {
+                  trigger: "item",
+                },
+                visualMap: {
+                  min: 0,
+                  max: 573, // 最大值（例如，USA的573）
+                  left: "left",
+                  top: "bottom",
+                  text: ["High", "Low"],
+                  calculable: true,
+                  color: ["orangered", "yellow", "lightskyblue"],
+                },
+                series: [
+                  {
+                    name: "University Count",
+                    type: "map",
+                    mapType: "world",
+                    roam: true,
+                    data: data, // 使用 JSON 数据
+                  },
+                ],
+              };
+              myChart.setOption(option);
+            </script>
+          </div>
+      
+          <div class="column">
+            <!-- 第3个图表：2012-2015 年排名前 5 的大学 -->
+            <div
+              id="rank4"
+              class="chart-container"
+              style="width: 95%; height: 300px"
+            ></div>
+            <script>
+              var chart = echarts.init(document.getElementById("rank4"), null, {
+                width: "auto",
+                height: "auto",
+              });
+              option = {
+                title: {
+                  text: "",
+                },
+                parallelAxis: [
+                  {
+                    dim: 0,
+                    name: "name",
+                    type: "category",
+                    data: ["Harvard", "MIT", "Stanford", "Cambridge", "Caltech"],
+                    nameLocation: "start",
+                    nameRotate: 45,
+                    nameTextStyle: { fontSize: 12 },
+                    nameTextStyle: {
+                      align: 'right' // 将文字对齐到轴的右侧
+                  },
+                  },
+                  {
+                    dim: 1,
+                    name: "2012",
+                    type: "category",
+                    data: ["1", "2", "3", "4", "5"],
+                    nameLocation: "start",
+                  },
+                  {
+                    dim: 2,
+                    name: "2013",
+                    type: "category",
+                    data: ["1", "2", "3", "4", "5"],
+                    nameLocation: "start",
+                  },
+                  {
+                    dim: 3,
+                    name: "2014",
+                    type: "category",
+                    data: ["1", "2", "3", "4", "5"],
+                    nameLocation: "start",
+                  },
+                  {
+                    dim: 4,
+                    name: "2015",
+                    type: "category",
+                    data: ["1", "2", "3", "4", "5"],
+                    nameLocation: "start",
+                  },
+                ],
+                parallel: {
+                  parallelAxisDefault: {
+                    type: "category",
+                    nameLocation: "end",
+                    nameGap: 20,
+                    nameTextStyle: {
+                      fontSize: 10,
+                      padding: [0, 0, 20, 0], // Increase padding to ensure labels are not cut off
+                    },
+                  },
+                },
+                series: [
+                  {
+                    type: "parallel",
+                    lineStyle: { width: 4 },
+                    data: [
+                      { value: ["Caltech", 4], lineStyle: { color: "red" } },
+                      {
+                        value: ["Cambridge", 3, 4, 3, 3],
+                        lineStyle: { color: "blue" },
+                      },
+                      {
+                        value: ["Stanford", 2, 1, 1, 1],
+                        lineStyle: { color: "green" },
+                      },
+                      { value: ["MIT", 1, 3, 2, 2], lineStyle: { color: "orange" } },
+                      {
+                        value: ["Harvard", 0, 0, 0, 0],
+                        lineStyle: { color: "purple" },
+                      },
+                    ],
+                  },
+                ],
+              };
+              chart.setOption(option);
+            </script>
+            <!-- 第4个图表：雷达图 -->
+            <div
+              id="mainChart"
+              class="chart-container"
+              style="width: 95%; height: 350px; margin-top: 20px"
+            ></div>
+            <script>
+              var mainChart = echarts.init(document.getElementById("mainChart"));
+      
+              var option = {
+                title: {
+                  text: "Top 5 Universities Radar Charts",
+                },
+                legend: {
+                  orient: "horizontal", // 设置图例水平排列
+                  bottom: 10, // 设置图例位于底部距离
+                  data: [
+                    "Harvard University",
+                    "Stanford University",
+                    "MIT",
+                    "University of California, Berkeley",
+                    "University of Cambridge",
+                    "Princeton University",
+                    "California Institute of Technology",
+                    "Columbia University",
+                    "University of Chicago",
+                    "University of Oxford",
+                  ],
+                },
+                radar: {
+                  indicator: [
+                    { name: "alumni" },
+                    { name: "award" },
+                    { name: "hici" },
+                    { name: "ns" },
+                    { name: "pub" },
+                    { name: "pcp" },
+                  ],
+                  radius: "60%", // 雷达图半径大小
+                },
+                series: [],
+              };
+      
+              // 学校数据
+              var universityData = [
+                { name: "Harvard University", data: [100, 100, 100, 100, 100, 76.6] },
+                {
+                  name: "Stanford University",
+                  data: [40.7, 89.6, 80.1, 70.1, 70.6, 53.8],
+                },
+                {
+                  name: "Massachusetts Institute of Technology (MIT)",
+                  data: [68.2, 80.7, 60.6, 73.1, 61.1, 68],
+                },
+                {
+                  name: "University of California, Berkeley",
+                  data: [65.1, 79.4, 66.1, 65.6, 67.9, 56.5],
+                },
+                {
+                  name: "University of Cambridge",
+                  data: [77.1, 96.6, 50.8, 55.6, 66.4, 55.8],
+                },
+              ];
+      
+              // 生成十个雷达图的子图
+              for (var i = 0; i < universityData.length; i++) {
+                option.series.push({
+                  type: "radar",
+                  symbol: "none", // 不显示标记点
+                  itemStyle: {
+                    normal: {
+                      lineStyle: {
+                        width: 3, // 设置线条粗细
+                      },
+                    },
+                  },
+                  data: [
+                    {
+                      value: universityData[i].data,
+                      name: universityData[i].name,
+                    },
+                  ],
+                });
+              }
+      
+              mainChart.setOption(option);
+            </script>
+          </div>
+    </main>
+  </body>
+</html>

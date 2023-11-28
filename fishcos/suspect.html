@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>vis demo</title>
+    <link rel="stylesheet" href="../style/suspect.css">
+  </head>
+  <body>
+    <header id="header">
+        <h1 id="appname">Fishcos</h1>
+        <img src="../image/fish.png" alt="logo" id="logo" />
+        <nav>
+          <ul id="modeMenu">
+            <li id="home" class="mode"><a href="./home.html">Home</a></li>
+            <li id="globalView" class="mode"><a href="./global.html">Global</a></li>
+            <li id="ndoeView" class="mode"><a href="./node.html">Node</a></li>
+            <li id="susView" class="mode"><a href="./suspect.html">Suspect</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <div id="sideBar">
+          <ul id="viweOptions">
+            <li id="ego" class="view"><a href="#">EgoNet View</a></li>
+            <li id="unity" class="view"><a href="#">UnityNet View</a></li>
+            <li id="hie" class="view"><a href="#">HieracyTree View</a></li>
+          </ul>
+          <!-- 创建一个容器放置filter框 -->
+          <div id="filters"></div>
+        </div>
+        
+        <div id="centerVis">
+            <!-- 主画布容器 -->
+          <div id="mountNode"></div>
+            <!-- 其他图表展示区 -->
+          <div id="charts"></div>
+        </div>
+
+        <div id="rightVis">
+            <!-- 详细信息展示区 -->
+          <div id="info">
+            <p>id: 8327</p>
+            <p>type: organization</p>
+          </div>
+        </div>
+      </main>
+
+    <!-- 创建一个容器放置app label -->
+
+    <!-- 创建一个容器用于模式选择 -->
+    <!-- 引入 G6 -->
+    <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-3.7.1/dist/g6.min.js"></script>
+    <!-- 4.x and later versions -->
+    <!-- <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.3.11/dist/g6.min.js"></script> -->
+
+    <script>
+
+    //   console.log(G6.Global.version);
+        const graph = new G6.Graph({
+
+            container: 'mountNode', // 容器 id
+            width: 800, // 画布宽
+            height: 400, // 画布高
+            fitView: true, // 自动缩放
+            defaultNode: {
+                size: 20, // 节点大小
+                // ...                 // 节点的其他配置
+                // 节点样式配置
+                style: {
+                    fill: '#53f', // 节点填充色
+                    stroke: '#a126', // 节点描边色
+                    lineWidth: 1, // 节点描边粗细
+                },
+                // 节点上的标签文本配置
+                labelCfg: {
+                // 节点上的标签文本样式配置
+                    style: {
+                        fill: '#000', // 节点标签文字颜色
+                    },
+                },
+            },
+            // 边在默认状态下的样式配置（style）和其他配置
+            defaultEdge: {
+                // ...                 // 边的其他配置
+                // 边样式配置
+                style: {
+                // color: 'red', // 边的颜色
+                // opacity: 0.5, // 边透明度
+                // stroke: 'grey', // 边描边颜色
+                },
+                // 边上的标签文本配置
+                labelCfg: {
+                    autoRotate: true, // 边上的标签文本根据边的方向旋转
+                },
+            },
+            // fitView: true,
+
+            // 设置图布局
+            layout: {
+                // Object，可选，布局的方法及其配置项，默认为 random 布局。
+                type: 'force', // 指定为力导向布局
+                preventOverlap: true, // 防止节点重叠
+                linkDistance: 100,
+                // nodeSize: 30        // 节点大小，用于算法中防止节点重叠时的碰撞检测。由于已经在上一节的元素配置中设置了每个节点的 size 属性，则不需要在此设置 nodeSize。
+            },
+           
+            // 设置图的交互
+            modes: {
+                default: ['drag-canvas', 'zoom-canvas', 'drag-node'], // 默认模式允许拖拽画布、放缩画布、拖拽节点
+                edit: []    // 配置编辑模式，编辑模式下禁止拖拽画布
+            },
+        })
+        const main = async () => {
+            const response = await fetch(
+            '../data/data.json',
+        );
+        const remoteData = await response.json();
+        
+        // 监听和绑定事件
+        graph.on('node:click', (ev) => {
+            const node = ev.item; // 被点击的节点元素
+            const shape = ev.target; // 被点击的图形，可根据该信息作出不同响应，以达到局部响应效果
+            console.log(node);
+            //显示当前点击node的tooltip
+            
+
+            // ... do sth
+        });
+
+        graph.on('edge:click', (ev) => {
+            const edge = ev.item; // 被点击的边元素
+            const shape = ev.target; // 被点击的图形，可根据该信息作出不同响应，以达到局部响应效果
+            console.log(edge);
+            // ... do sth
+        });
+
+        // ...
+        graph.data(remoteData); // 加载远程数据
+        graph.render(); // 渲染
+
+        };
+        main();
+    </script>
+  </body>
+</html>

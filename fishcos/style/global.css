@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+    font-family: "Microsoft YaHei",sans-serif;
+   }
+   
+header,nav{
+    margin-bottom: 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(27, 26, 28);
+  }
+
+  nav {
+    height: 50px;
+    flex: 100%;
+    display: flex;
+  }
+  
+  nav ul{
+    /* 适应屏幕 */
+
+    padding: 0;
+    list-style-type: none;
+    flex: 2;
+    display: flex;
+  }
+  
+  nav li {
+    display: inline;
+    text-align: center;
+    flex: 1;
+  }
+  
+  nav a, nav span {
+    display: inline-block;
+    font-size: 25px;
+    height: 3rem;
+    line-height: 3rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: white;
+  }
+
+#appname{
+    float: left;
+    font-size: 50px;
+    margin: 0;
+    /* 居中 */
+    text-align: center;
+    color: azure;
+} 
+
+#logo{
+    width:50px;
+    height: 50px;
+    float: left;
+}
+
+main{
+    margin-top: 0px;
+    width: 100%;
+    height: 100%;
+    flex: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: rgba(255, 255, 255, 0.933); /* 白色背景透明度为 30% */
+    /* 使用背景图片 */
+    background-image: url("1f6f304878e24859adad25f2ea715204.jpg"); /* 替换为你的背景图片 URL */
+    background-size: cover; /* 图片大小适应屏幕 */
+    background-repeat: no-repeat; /* 不重复显示背景图片 */
+    /* 其他样式 */
+    font-family: Arial, sans-serif; /* 设定字体 */
+    margin: 0; /* 去除页面默认的 margin */
+    padding: 0; /* 去除页面默认的 padding */
+  }
+  /* 定义一个类来设置子图的样式 */
+  .chart-container {
+    background-color: rgba(255,255,255,0.8); /* 背景颜色为白色，透明度为 80% */
+    border-radius: 8px; /* 圆角边框 */
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.3); /* 添加阴影效果 */
+    padding: 0px; /* 内边距 */
+    margin-bottom: 20px; /* 底部外边距 */
+  }
+  #intro {
+    width: auto;
+    padding: 10px;
+    border: 2px solid black;
+    font-size: 40px; /* 增加字体大小 */
+    font-weight: 1900;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 5); /* 添加阴影效果 */
+  }
+
