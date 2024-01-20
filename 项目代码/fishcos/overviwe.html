@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <link rel="stylesheet" href="../style/global.css" />
+  <meta charset="utf-8" />
+  <title>Fishcos</title>
+  <link rel="shortcut icon" href="./image/fish.png" type="image/x-icon">
+  <script src="js/echarts.js"></script>
+  <script src="js/vintage.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<header id="header">
+  <h1 id="appname">Fishcos</h1>
+  <img src="../image/fish.png" alt="logo" id="logo" />
+  <nav>
+    <ul id="modeMenu">
+      <li id="home" class="mode"><a href="./index.html">Home</a></li>
+      <li id="globalView" class="mode">
+        <a href="./overviwe.html">OverView</a>
+      </li>
+      <li id="ndoeView" class="mode"><a href="./detail.html">detail</a></li>
+
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="column">
+    <!-- 第1个图表：世界大学排名 Top 10得分 -->
+    <div
+            id="rank"
+            class="chart-container"
+            style="width: 95%; height: 300px"
+    ></div>
+    <script>
+      // 读取JSON文件并创建图表
+      fetch('../data/树状图.json')
+              .then(response => response.json())
+              .then(data => {
+                // 计算每个树的节点数目
+                var treeNodesCount = {};
+
+                Object.keys(data).forEach(function(key) {
+                  var count = countNodes(data[key]);
+                  treeNodesCount[key] = count;
+                });
+
+                function countNodes(nodes) {
+                  var count = 0;
+                  nodes.forEach(function(node) {
+                    count += 1;
+                    if (node.children) {
+                      count += countNodes(node.children);
+                    }
+                  });
+                  return count;
+                }
+
+                // 准备图表数据
+                var chartData = [];
+                for (var treeKey in treeNodesCount) {
+                  if (treeNodesCount.hasOwnProperty(treeKey)) {
+                    chartData.push({ name: treeKey, value: treeNodesCount[treeKey] });
+                  }
+                }
+
+                // 创建图表
+                var myChart = echarts.init(document.getElementById('rank')); // 确保有一个 id 为 'rank' 的元素
+                var option = {
+                  title: {
+                    text: 'Node Counts of Trees',
+                    textStyle: {
+                      color: '#576b95',
+                      fontSize: 18
+                    }
+                  },
+                  tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                      type: 'shadow'
+                    }
+                  },
+                  xAxis: {
+                    type: 'category',
+                    data: chartData.map(function(item) { return item.name; })
+                  },
+                  yAxis: {
+                    type: 'value'
+                  },
+                  series: [{
+                    name: 'Node Count',
+                    type: 'bar',
+                    data: chartData,
+                    itemStyle: {
+                      color: function(params) {
+                        var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae'];
+                        return colorList[params.dataIndex % colorList.length];
+                      }
+                    }
+                  }]
+                };
+
+                // 设置图表选项
+                myChart.setOption(option);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+    </script>
+
+
+    <!-- 第2个图表：基于国家的组织或公司数量 -->
+    <div
+            id="myChart"
+            class="chart-container"
+            style="width: 95%; height: 350px; margin-top: 20px"
+    ></div>
+    <script>
+      // 读取JSON文件并创建图表
+      fetch('../data/data.json')
+              .then(response => response.json())
+              .then(data => {
+                var countries = {};
+                data.nodes.forEach(function(item) {
+                  if (item.country in countries) {
+                    countries[item.country]++;
+                  } else {
+                    countries[item.country] = 1;
+                  }
+                });
+
+                // 准备图表数据
+                var chartData = [];
+                for (var country in countries) {
+                  if (countries.hasOwnProperty(country)) {
+                    chartData.push({name: country, value: countries[country]});
+                  }
+                }
+
+                // 创建图表
+                var myChart = echarts.init(document.getElementById("myChart"));
+                var option = {
+                  title: {
+                    text: 'Organization and Company Distribution by Country',
+                    textStyle: {
+                      color: '#576b95', // 标题颜色
+                      fontSize: 18
+                    }
+                  },
+                  tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)',
+                    backgroundColor: 'rgba(255,255,255,0.7)', // 工具提示的背景颜色
+                    borderColor: '#576b95',
+                    borderWidth: 1,
+                    textStyle: {
+                      color: '#333'
+                    }
+                  },
+                  series: [
+                    {
+                      name: 'Countries',
+                      type: 'pie',
+                      data: chartData,
+                      emphasis: {
+                        itemStyle: {
+                          shadowBlur: 20,
+                          shadowOffsetX: 0,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                      },
+                      itemStyle: {
+                        normal: {
+                          color: function(params) {
+                            // 定义一个颜色数组
+                            var colorList = [
+                              '#c23531', '#2f4554', '#61a0a8', '#d48265',
+                              '#91c7ae', '#749f83', '#ca8622', '#bda29a',
+                              '#6e7074', '#546570', '#c4ccd3'
+                            ];
+                            return colorList[params.dataIndex % colorList.length];
+                          },
+                          shadowBlur: 200,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                      }
+                    }
+                  ]
+                };
+                myChart.setOption(option);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+    </script>
+
+  </div>
+
+  <div class="column">
+    <!-- 第5个图表：词云图 -->
+    <div class="chart-container" style="width: 95%; margin-top: 20px">
+      <input type="text" id="nodeNameInput" placeholder="Enter a Node Name">
+      <button onclick="generateWordCloud()">Generate Word Cloud</button>
+    </div>
+    <div id="wordCloud" class="chart-container" style="width: 95%; height: 600px; overflow-y: auto; margin-top: 20px"></div>
+    <script>
+      // 全局变量以存储数据
+      var treeData;
+
+      // 颜色数组，用于给词汇随机上色
+      var colors = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+
+      // 从文件加载数据
+      fetch('../data/树状图.json') // 替换为您的 JSON 文件的实际路径
+              .then(response => response.json())
+              .then(data => {
+                treeData = data;
+                // 在页面加载时默认展示根节点为23的树并生成词云
+                document.getElementById('nodeNameInput').value = '23';
+                generateWordCloud();
+              });
+
+      // 生成词云
+      function generateWordCloud() {
+        var nodeNameInput = document.getElementById('nodeNameInput');
+        var nodeName = nodeNameInput.value.trim(); // 获取用户输入的节点名称
+        var wordCloudContainer = document.getElementById('wordCloud');
+        wordCloudContainer.innerHTML = ''; // 清除旧的词云
+
+        if (nodeName && treeData[nodeName]) {
+          var nodes = [];
+          collectNodes(treeData[nodeName]);
+
+          // 收集节点
+          function collectNodes(subtree) {
+            subtree.forEach(node => {
+              nodes.push(node.name);
+              if (node.children) {
+                collectNodes(node.children);
+              }
+            });
+          }
+
+          // 创建词云数据
+          var wordCloudData = {};
+          nodes.forEach(node => {
+            if (node in wordCloudData) {
+              wordCloudData[node]++;
+            } else {
+              wordCloudData[node] = 1;
+            }
+          });
+
+          // 转换词云数据为数组
+          var wordCloudArray = [];
+          for (var word in wordCloudData) {
+            if (wordCloudData.hasOwnProperty(word)) {
+              wordCloudArray.push({ name: word, value: wordCloudData[word] });
+            }
+          }
+
+          // 根据词频排序
+          wordCloudArray.sort((a, b) => b.value - a.value);
+
+          // 创建词云
+          wordCloudArray.forEach(item => {
+            var span = document.createElement('span');
+            span.textContent = item.name + ' ';
+            var size = 14 + (item.value * 2); // 根据词频调整字体大小
+            span.style.fontSize = size + 'px';
+            span.style.fontWeight = Math.random() > 0.5 ? 'bold' : 'normal'; // 随机粗细
+            span.style.color = colors[Math.floor(Math.random() * colors.length)]; // 随机颜色
+            span.style.margin = '5px';
+            wordCloudContainer.appendChild(span);
+          });
+        } else {
+          alert('Node not found.');
+        }
+      }
+    </script>
+  </div>
+
+  <div class="column">
+    <!-- 第3个图表：2012-2015 年排名前 5 的大学 -->
+    <div
+            id="rank4"
+            class="chart-container"
+            style="width: 95%; height: 300px"
+    ></div>
+    <script>
+      // 读取JSON文件并创建图表
+      fetch('../data/data.json')
+              .then(response => response.json())
+              .then(data => {
+                var typeCounts = {};
+                data.nodes.forEach(function(item) {
+                  if (item.type in typeCounts) {
+                    typeCounts[item.type]++;
+                  } else {
+                    typeCounts[item.type] = 1;
+                  }
+                });
+
+                // 准备图表数据
+                var chartData = [];
+                for (var type in typeCounts) {
+                  if (typeCounts.hasOwnProperty(type)) {
+                    chartData.push({ name: type, value: typeCounts[type] });
+                  }
+                }
+
+                // 创建图表
+                var myChart = echarts.init(document.getElementById('rank4'));
+                var option = {
+                  title: {
+                    text: 'Type Distribution',
+                    textStyle: {
+                      color: '#576b95',
+                      fontSize: 18
+                    }
+                  },
+                  tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                      type: 'shadow'
+                    }
+                  },
+                  xAxis: {
+                    type: 'category',
+                    data: chartData.map(function(item) { return item.name; }),
+                    axisLabel: {
+                      interval: 0, // 显示所有标签
+                      rotate: 45 // 若标签过多可旋转标签以适应
+                    }
+                  },
+                  yAxis: {
+                    type: 'value'
+                  },
+                  series: [{
+                    name: 'Count',
+                    type: 'bar',
+                    data: chartData,
+                    itemStyle: {
+                      color: function(params) {
+                        var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae'];
+                        return colorList[params.dataIndex % colorList.length];
+                      }
+                    },
+                    label: {
+                      show: true, // 显示标签
+                      position: 'top', // 标签显示位置
+                      formatter: function(params) {
+                        return params.data.value;
+                      }
+                    }
+                  }]
+                };
+
+                // 设置图表选项
+                myChart.setOption(option);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+    </script>
+
+
+    <div class="chart-container" style="width: 95%; margin-top: 20px">
+      <input type="text" id="nodeNameInput4" placeholder="Enter Node Name for Treemap">
+      <button onclick="highlightNode()">Highlight Node</button>
+    </div>
+    <div id="treemap" class="chart-container" style="width: 95%; height: 350px; margin-top: 20px"></div>
+    <script>
+      // 全局变量以存储 ECharts 实例
+      var myTreemapChart;
+
+      fetch('../data/树状图.json') // 替换为您的 JSON 文件的实际路径
+              .then(response => response.json())
+              .then(data => {
+                // 处理数据以适应 ECharts 层次图格式
+                var formattedData = [];
+
+                for (var key in data) {
+                  if (data.hasOwnProperty(key)) {
+                    var group = data[key];
+                    var children = group.map(function(node) {
+                      return {
+                        name: node.name,
+                        value: node.children ? node.children.length : 1, // 假设值为子节点数量
+                        children: node.children ? node.children.map(function(child) {
+                          return { name: child.name, value: 1 };  // 可进一步细化
+                        }) : []
+                      };
+                    });
+                    formattedData.push({ name: key, children: children });
+                  }
+                }
+
+                // 创建 ECharts 层次图
+                myTreemapChart = echarts.init(document.getElementById('treemap'));
+                var option = {
+                  title: {
+                    text: 'Treemap of Entities',
+                    textStyle: {
+                      color: '#576b95',
+                      fontSize: 18
+                    }
+                  },
+                  tooltip: {},
+                  series: [{
+                    type: 'treemap',
+                    data: formattedData,
+                    roam: true, // 开启漫游
+                    label: {
+                      show: true,
+                      formatter: '{b}'
+                    },
+                    upperLabel: {
+                      show: true,
+                      height: 30
+                    }
+                  }]
+                };
+
+                // 设置图表选项
+                myTreemapChart.setOption(option);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+
+      // 用于突出显示节点的函数
+      function highlightNode() {
+        var nodeName = document.getElementById('nodeNameInput4').value.trim();
+        if (nodeName) {
+          myTreemapChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0, // 根据您的实际情况调整系列索引
+            name: nodeName
+          });
+
+          myTreemapChart.dispatchAction({
+            type: 'showTip',
+            seriesIndex: 0,
+            name: nodeName
+          });
+        }
+      }
+    </script>
+
+  </div>
+</main>
+</body>
+</html>

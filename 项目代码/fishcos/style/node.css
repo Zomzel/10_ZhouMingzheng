@@ -1,0 +1,268 @@
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  font-family: "Microsoft YaHei",sans-serif;
+ }
+ 
+header,nav{
+  margin-bottom: 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(27, 26, 28);
+}
+
+nav {
+  height: 50px;
+  flex: 100%;
+  display: flex;
+}
+
+nav ul{
+  /* 适应屏幕 */
+
+  padding: 0;
+  list-style-type: none;
+  flex: 2;
+  display: flex;
+}
+
+nav li {
+  display: inline;
+  text-align: center;
+  flex: 1;
+}
+
+nav a, nav span {
+  display: inline-block;
+  font-size: 25px;
+  height: 3rem;
+  line-height: 3rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: white;
+}
+
+#appname{
+  float: left;
+  font-size: 50px;
+  margin: 0;
+  /* 居中 */
+  text-align: center;
+  color: azure;
+} 
+
+#logo{
+  width:50px;
+  height: 50px;
+  float: left;
+}
+
+
+
+main{
+  margin-top: 0px;
+  width: 100%px;
+  height: 600px;
+  display: flex;
+  flex-direction: row;
+}
+
+#sidebar{
+  width: 150px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#viweOptions{
+  display: flex;
+  flex-direction:column;
+  list-style-type: none;
+  list-style: none;
+  width: 100%;
+  height: 20%;
+  /* 去掉margin和padding */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.view{
+  /* 字体居中显示 */
+  text-align: center;
+  list-style-type: none;
+  list-style: none;
+  border: 1px solid black;
+  box-shadow: inset;
+}
+
+button{
+  background-color:rgb(106, 129, 246);
+  color:white;
+  box-sizing: content-box;				
+  border-radius: 2px;
+}
+
+button:hover{
+  background-color: rgb(30, 12, 110);
+}
+
+#viweOptions button{
+  width: 300px;
+  height: 300px;
+  border: 0px;
+  font-size: 16px;
+}
+
+#filters{
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  list-style: none;
+  width: 100%;
+  height: 20%;
+  /* 去掉margin和padding */
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0.8;
+  
+}
+
+
+
+/* 设置中央可视化区域样式 */
+#centerVis {
+  background-color: rgb(255, 255, 255);
+  margin: 0;
+  flex: 1; /* 中央可视化区域占剩余空间 */
+  display: flex;
+  flex-direction: column; /* 垂直方向的弹性布局 */
+}
+
+#mountNode{
+  flex:1;
+  display:flex;
+  width:100%;
+  height: 100%;
+}
+
+#typeFilters p{
+  margin-bottom: 3px;
+}
+
+
+.content{
+  margin-top: 80px;
+  margin-left: 0;
+  padding: 10px;
+  height: 250px;
+  overflow-y:auto;
+}
+
+.custom-context-menu {
+  display: none; /* 默认不显示菜单 */
+  position: absolute; /* 使用绝对定位，依据最近的相对定位的祖先元素定位 */
+  z-index: 1000; /* 确保菜单在最顶层 */
+  width: 150px; /* 菜单的宽度 */
+  background-color: #f0f0f0; /* 菜单的背景颜色 */
+  border: 1px solid #ddd; /* 菜单的边框 */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* 给菜单添加阴影以突出显示 */
+  border-radius: 5px; /* 菜单的边角是圆的 */
+  padding: 5px 5px; /* 内边距为5px，这样菜单项之间就不会有空白 */
+  opacity: 0.8;
+}
+
+.custom-context-menu li {
+  padding: 5px; /* 菜单项的内边距 */
+  cursor: pointer; /* 鼠标悬停时显示指针图标 */
+  list-style-type: none; /* 去除菜单项前的小圆点 */
+  
+}
+
+.custom-context-menu li:hover {
+  background-color: #4679bd; /* 鼠标悬停时菜单项的背景颜色 */
+  color: white; /* 鼠标悬停时菜单项的文字颜色 */
+}
+
+
+
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #3e8e41;
+}
+
+#myInput {
+  box-sizing: border-box;
+  background-image: url('../image/search.png');
+  background-size: 25px 25px;
+  background-position: 14px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  padding: 14px 20px 12px 45px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+#myInput:focus {outline: 3px solid #ddd;}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f6f6f6;
+  min-width: 230px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+.dropdown-content option {
+  color: rgb(194, 30, 30);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown option:hover {background-color: #ddd;}
+.show {display: block;}
+
+
+/* Table Head */
+.content thead th {
+  background-color: rgb(81, 130, 187);
+  color: #fff;
+  border-bottom-width: 0;
+  }
+   
+  /* Column Style */
+  .content td {
+  color: #000;
+  }
+  /* Heading and Column Style */
+  .content tr, .content th {
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(81, 130, 187);
+  }
+   
+  /* Padding and font style */
+  .content td, .content th {
+  padding: 5px 10px;
+  font-size: 12px;
+  font-family: Verdana;
+  font-weight: bold;
+  }

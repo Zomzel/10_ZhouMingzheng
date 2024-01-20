@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Fishcos</title>
+  <link rel="shortcut icon" href="./image/fish.png" type="image/x-icon">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.bootcss.com/popper.js/1.14.7/umd/popper.min.js"></script>
+
+  <!-- Bootstrap-Select CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css"
+    rel="stylesheet">
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Bootstrap-Select JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+  <link rel="stylesheet" href="../style/node.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <script type="text/javascript" src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-3.7.1/dist/g6.min.js"></script>
+  <script type="text/javascript" src="./main.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+  <script src="js/echarts.js"></script>
+
+
+</head>
+
+<body>
+  <header id="header">
+    <h1 id="appname">Fishcos</h1>
+    <img src="../image/fish.png" alt="logo" id="logo" />
+    <nav>
+      <ul id="modeMenu">
+        <li id="home" class="mode"><a href="./index.html">Home</a></li>
+        <li id="globalView" class="mode"><a href="./overviwe.html">OverView</a></li>
+        <li id="ndoeView" class="mode"><a href="./detail.html">detail</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div id="sideBar" style="background-image: url(./image/fish2.jpg);
+        background-repeat: no-repeat;background-size:100% 100%">
+      <div id="viweOptions">
+        <button id="ego" class="view">EgoNet View</button>
+        <button id="Parallel" class="view">Parallel View</button>
+        <button id="hie" class="view">HieracyTree View</button>
+      </div>
+      <!-- 创建一个容器放置filter框 -->
+      <div id="filters">
+        <a style="color: aliceblue;">Chose a node:</a>
+        <input id="nodeInput" type="text" class="selectpicker" list="nodelist" placeholder="选择目标节点"
+          style="padding:0.5em;border-radius:5px;">
+        <datalist id="nodelist"></datalist>
+        <div id="typeFilters">
+          <p style="color: white;">Select Edge Types: </p>
+          <select class="selectpicker" id="filtEdge" multiple data-actions-box="true" 
+                style="padding:0.5em;border-radius:5px;width: 150px;">
+            <option>all</option>
+            <option value="family_relationship">familyship</option>
+            <option value="partnership">parttnership</option>
+            <option value="membership">membership</option>
+            <option value="ownership">ownership</option>
+          </select>
+          <p style="color: white;">Select Node Types: </p>
+          <select class="selectpicker" id="filtNode" multiple data-actions-box="true" 
+            style="padding:0.5em;border-radius:5px;width: 150px;" >
+            <option>all</option>
+            <option value="person">person</option>
+            <option value="company">company</option>
+            <option value="organization">organization</option>
+            <option value="political_organization">political_organization</option>
+            <option value="location">location</option>
+            <option value="event">event</option>
+            <option value="movement">movement</option>
+            <option value="vessel">vessel</option>
+            <option value="uncertain">uncertain</option>
+          </select>
+          <button id="edgeFilterBtn" class="btn btn-primary" style="padding:0.5em;border-radius:5px;margin-left: 30px;"><i class="fas fa-sync" aria-hidden="true" /></i></button>
+        
+          <script>
+            $(document).ready(function () {
+              $('.selectpicker').selectpicker();
+
+              // 监听全选选项的变化
+              $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                if (clickedIndex === 0 && isSelected) {
+                  // 全选被选中
+                  $(this).selectpicker('selectAll');
+                } else if (clickedIndex === 0 && !isSelected) {
+                  // 全选被取消
+                  $(this).selectpicker('deselectAll');
+                }
+              });
+            });
+          </script>
+        </div>
+      </div>
+      <div class="content">
+        <div id="table-7"></div>
+      </div>
+    </div>
+
+    <div id="centerVis">
+      <!-- 主画布容器 -->
+      <!-- 搜索框 -->
+      <div id="searchBox" style="display: flex;">
+        <div class="dropdown">
+          <button onclick="myFunction()" class="dropbtn">非法节点列表</button>
+          <script>
+            function myFunction() {
+              // document.getElementById("illegal-node").classList.toggle("show");
+              let listcontent = document.getElementById("illegal-node");
+              if (listcontent.style.display === "none") {
+                listcontent.style.display = "block";
+              }else{
+                listcontent.style.display = "none";
+              }
+          }
+          </script>
+          <div id="illegal-node" class="dropdown-content" style="display: none;">
+            <input  id="myInput" type="text" list = "illegalNodelist" placeholder="搜索..">
+            <datalist id="illegalNodelist">
+            </datalist>
+          </div>
+        </div>
+         <input id="searchInput" type="text" list="treeNodelist" placeholder="搜索节点" style="display:none;">
+        <datalist id="treeNodelist">
+          <option value="8327" label="8327">8327</option>
+        </datalist>
+      </div>
+      <div id="mountNode"></div>
+    </div>
+
+    <!-- 创建菜单 -->
+    <ul id="custom-menu" class="custom-context-menu" style="display: none; position: absolute;">
+      <li data-action="labelIllegal"><i class="fa fa-exclamation-circle" aria-hidden="true" /></i> Label Illegal</li>
+      <li data-action="labellegal"><i class="fa fa-adjust" aria-hidden="true" /></i> Label legal</li>
+      <li data-action="expand"><i class="fa fa-arrows-alt" aria-hidden="true" /></i> Expand</li>
+      <li data-action="foucs"><i class="fa fa-crosshairs" aria-hidden="true" /></i> Focus</li>
+      <li data-action="group"><i class="fa fa-users" aria-hidden="true" /></i> group</li>
+      <li data-action="info"><i class="fa fa-share-alt" aria-hidden="true" /></i> detail info</li>
+      <!-- 其他菜单项 -->
+    </ul>
+  </main>
+</body>
+
+</html>

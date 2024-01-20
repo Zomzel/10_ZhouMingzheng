@@ -1,0 +1,126 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+    font-family: "Microsoft YaHei",sans-serif;
+    /* 背景图片 */
+    background-image: url(../image/fish.jpg);
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    background-size:100% 100%;
+    overflow: y;
+   }
+
+header{
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+   
+header,nav{
+    margin-bottom: 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(27, 26, 28);
+  }
+
+  nav {
+    height: 50px;
+    flex: 100%;
+    display: flex;
+  }
+  
+  nav ul{
+    /* 适应屏幕 */
+
+    padding: 0;
+    list-style-type: none;
+    flex: 2;
+    display: flex;
+  }
+  
+  nav li {
+    display: inline;
+    text-align: center;
+    flex: 1;
+  }
+  
+  nav a, nav span {
+    display: inline-block;
+    font-size: 25px;
+    height: 3rem;
+    line-height: 3rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: white;
+  }
+
+#appname{
+    float: left;
+    font-size: 50px;
+    margin: 0;
+    /* 居中 */
+    text-align: center;
+    color: azure;
+} 
+
+#logo{
+    width:50px;
+    height: 50px;
+    float: left;
+}
+
+main{
+    margin-top: 0px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 300px;
+    border-radius: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+    width: 100%;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    background-color: rgba(66, 65, 65, 0.5);
+    position:relative;
+    top:66px;
+    overflow: auto;
+    /* 设置字体颜色 */
+    color: rgb(255, 255, 255);
+}
+main a{
+    
+    font-size: 30px;
+    height: 2rem;
+    line-height: 2rem;
+    /* text-decoration: none; */
+     /* justify-content: center;
+    align-items: center; */
+    /* 下划线 */
+    text-decoration: underline;
+    color:blue;
+
+}
+
+main img{
+  box-shadow: 10px 10px 10px rgba(0,0,0,.5);
+
+/*考虑浏览器兼容性*/
+margin: 10px 25px;
+border-radius: 5px;;
+-moz-box-shadow: 10px 10px 10px rgba(0,0,0,.5);
+
+-webkit-box-shadow: 10px 10px 10px rgba(0,0,0,.5);
+
+}
+
+
+
+
+
+

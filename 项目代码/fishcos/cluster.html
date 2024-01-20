@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Social Network Visualization</title>
+    <!-- 引入D3.js库 -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- 引入Louvain.js库 -->
+    <script src="https://cdn.jsdelivr.net/npm/louvain@1.2.0/index.min.js"></script>
+</head>
+<body>
+    <div id="social-network" style="width: 800px; height: 600px;"></div>
+
+    <script>
+        // 读取graph.json文件
+        d3.json("../data/dataFormatted.json").then(function(data) {
+            // 创建社交网络图
+            const svg = d3.select("#social-network")
+                .append("svg")
+                .attr("width", 800)
+                .attr("height", 600);
+
+            // 使用Louvain算法进行社区发现
+            let louvain = require('louvain');
+            const runing = louvain.nodes(data.nodes).edges(data.edges);
+            let communities = runing();
+
+
+            // 添加社区信息到节点数据中
+            data.nodes.forEach(function(node) {
+                node.community = communities[node.id];
+            });
+
+            // 创建力导向图
+            const simulation = d3.forceSimulation(data.nodes)
+                .force("link", d3.forceLink(data.edges).id(d => d.id))
+                .force("charge", d3.forceManyBody().strength(-200))
+                .force("center", d3.forceCenter(400, 300))
+                .on("tick", ticked);
+
+            // 创建节点和边
+            const link = svg.selectAll(".link")
+                .data(data.edges)
+                .enter().append("line")
+                .attr("class", "link");
+
+            const node = svg.selectAll(".node")
+                .data(data.nodes)
+                .enter().append("circle")
+                .attr("class", "node")
+                .attr("r", 8)
+                .style("fill", d => getColor(d.community));
+
+            // 更新节点和边的位置
+            function ticked() {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node
+                    .attr("cx", d => d.x)
+                    .attr("cy", d => d.y);
+            }
+
+            // 为每个社区生成不同颜色
+            function getColor(community) {
+                const colors = ["#ff5733", "#33ff57", "#5733ff", "#ff33e6", "#e6ff33"];
+                return colors[community % colors.length];
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+{
+    "company": {
+        "ownership": {
+            "organization": 77,
+            "uncertain": 56,
+            "company": 10,
+            "person": 66,
+            "location": 30,
+            "political_organization": 8,
+            "vessel": 2,
+            "movement": 7,
+            "event": 6
+        },
+        "partnership": {
+            "organization": 105,
+            "uncertain": 57,
+            "location": 15,
+            "person": 56,
+            "political_organization": 5,
+            "company": 8,
+            "event": 3,
+            "vessel": 4,
+            "movement": 2
+        },
+        "family_relationship": {
+            "uncertain": 49,
+            "organization": 99,
+            "person": 39,
+            "location": 29,
+            "company": 11,
+            "movement": 2,
+            "vessel": 4,
+            "event": 1,
+            "political_organization": 3
+        },
+        "membership": {
+            "uncertain": 77,
+            "event": 11,
+            "organization": 147,
+            "person": 95,
+            "company": 28,
+            "location": 64,
+            "movement": 6,
+            "vessel": 22,
+            "political_organization": 5
+        }
+    },
+    "organization": {
+        "ownership": {
+            "company": 53,
+            "organization": 167,
+            "political_organization": 20,
+            "uncertain": 97,
+            "location": 51,
+            "person": 76,
+            "vessel": 18,
+            "event": 7,
+            "movement": 2
+        },
+        "family_relationship": {
+            "company": 53,
+            "organization": 115,
+            "location": 31,
+            "political_organization": 7,
+            "uncertain": 52,
+            "person": 58,
+            "movement": 2,
+            "vessel": 7,
+            "event": 3
+        },
+        "membership": {
+            "company": 71,
+            "organization": 187,
+            "person": 128,
+            "political_organization": 19,
+            "location": 54,
+            "vessel": 21,
+            "uncertain": 133,
+            "event": 12,
+            "movement": 8
+        },
+        "partnership": {
+            "uncertain": 73,
+            "organization": 164,
+            "location": 32,
+            "company": 46,
+            "political_organization": 16,
+            "person": 95,
+            "event": 9,
+            "vessel": 13,
+            "movement": 5
+        }
+    },
+    "location": {
+        "membership": {
+            "company": 16,
+            "organization": 12,
+            "uncertain": 17,
+            "person": 21,
+            "vessel": 1,
+            "location": 5,
+            "political_organization": 4
+        },
+        "partnership": {
+            "organization": 18,
+            "company": 2,
+            "political_organization": 10,
+            "person": 20,
+            "event": 2,
+            "location": 8,
+            "uncertain": 6
+        },
+        "ownership": {
+            "company": 12,
+            "organization": 23,
+            "person": 33,
+            "uncertain": 18,
+            "political_organization": 12,
+            "movement": 2,
+            "location": 12,
+            "event": 1
+        },
+        "family_relationship": {
+            "location": 1,
+            "organization": 4,
+            "company": 1,
+            "person": 2,
+            "vessel": 1,
+            "uncertain": 1
+        }
+    },
+    "political_organization": {
+        "partnership": {
+            "organization": 15,
+            "company": 1,
+            "location": 5,
+            "event": 1,
+            "person": 9,
+            "political_organization": 5
+        },
+        "ownership": {
+            "company": 2,
+            "political_organization": 3,
+            "organization": 11,
+            "location": 9,
+            "person": 20,
+            "uncertain": 2
+        },
+        "membership": {
+            "organization": 5,
+            "person": 6,
+            "uncertain": 4,
+            "location": 3,
+            "vessel": 1
+        },
+        "family_relationship": {
+            "event": 1,
+            "organization": 2,
+            "political_organization": 1,
+            "uncertain": 1
+        }
+    },
+    "person": {
+        "ownership": {
+            "company": 13,
+            "organization": 19,
+            "political_organization": 12,
+            "movement": 4,
+            "uncertain": 14,
+            "vessel": 4,
+            "event": 2,
+            "location": 16
+        },
+        "membership": {
+            "organization": 17,
+            "company": 8,
+            "uncertain": 20,
+            "event": 5,
+            "political_organization": 1,
+            "location": 5,
+            "vessel": 1
+        },
+        "partnership": {
+            "location": 12,
+            "uncertain": 18,
+            "company": 8,
+            "organization": 24,
+            "political_organization": 4,
+            "event": 2,
+            "vessel": 2
+        },
+        "family_relationship": {
+            "person": 111,
+            "uncertain": 3,
+            "company": 1,
+            "organization": 1,
+            "event": 2,
+            "location": 1
+        }
+    },
+    "vessel": {
+        "membership": {
+            "organization": 5,
+            "company": 4,
+            "movement": 1,
+            "location": 2,
+            "person": 6,
+            "uncertain": 2,
+            "vessel": 1
+        },
+        "family_relationship": {
+            "uncertain": 1,
+            "movement": 1,
+            "company": 1,
+            "person": 2
+        },
+        "ownership": {
+            "vessel": 2,
+            "company": 3,
+            "organization": 7,
+            "person": 11,
+            "uncertain": 4,
+            "location": 3,
+            "political_organization": 1
+        },
+        "partnership": {
+            "organization": 4,
+            "uncertain": 2
+        }
+    },
+    "event": {
+        "family_relationship": {
+            "organization": 6,
+            "person": 1,
+            "uncertain": 1
+        },
+        "ownership": {
+            "company": 3,
+            "person": 2,
+            "organization": 5,
+            "location": 4,
+            "movement": 2,
+            "uncertain": 1
+        },
+        "membership": {
+            "person": 7,
+            "organization": 10,
+            "location": 3,
+            "company": 1,
+            "uncertain": 2,
+            "political_organization": 1
+        },
+        "partnership": {
+            "uncertain": 1,
+            "person": 2,
+            "organization": 1,
+            "location": 1
+        }
+    },
+    "movement": {
+        "membership": {
+            "organization": 5,
+            "company": 2,
+            "vessel": 2,
+            "person": 3,
+            "event": 1,
+            "location": 2,
+            "uncertain": 1
+        },
+        "ownership": {
+            "organization": 3,
+            "movement": 3,
+            "company": 5,
+            "person": 9,
+            "event": 2,
+            "location": 7,
+            "vessel": 1
+        },
+        "partnership": {
+            "company": 5,
+            "movement": 3,
+            "location": 4,
+            "person": 2,
+            "uncertain": 1,
+            "organization": 4,
+            "event": 1
+        },
+        "family_relationship": {
+            "person": 1
+        }
+    },
+    "uncertain": {
+        "ownership": {
+            "company": 46,
+            "organization": 114,
+            "person": 67,
+            "location": 31,
+            "uncertain": 43,
+            "movement": 1,
+            "vessel": 8,
+            "political_organization": 4,
+            "event": 6
+        },
+        "membership": {
+            "company": 57,
+            "organization": 142,
+            "person": 91,
+            "political_organization": 7,
+            "location": 51,
+            "vessel": 12,
+            "event": 19,
+            "uncertain": 79,
+            "movement": 4
+        },
+        "family_relationship": {
+            "company": 27,
+            "organization": 56,
+            "political_organization": 10,
+            "person": 34,
+            "location": 20,
+            "uncertain": 28,
+            "movement": 2,
+            "vessel": 3
+        },
+        "partnership": {
+            "organization": 95,
+            "political_organization": 8,
+            "vessel": 5,
+            "person": 75,
+            "uncertain": 37,
+            "company": 29,
+            "location": 15,
+            "movement": 5,
+            "event": 2
+        }
+    }
+}
