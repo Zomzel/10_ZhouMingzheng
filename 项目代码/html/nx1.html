@@ -1,0 +1,438 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+                <link href="lib/tom-select/tom-select.css" rel="stylesheet">
+                <script src="lib/tom-select/tom-select.complete.min.js"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 600px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+              <div id="filter-menu" class="card-header">
+                <div class="row no-gutters">
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="updateFilter(value, 'item')"
+                            id="select-item"
+                        >
+                        <option value="">Select a network item</option>
+                        <option value="edge">edge</option>
+                        <option value="node">node</option>
+                    </select>
+                  </div>
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="updateFilter(value, 'property')"
+                            id="select-property"
+                        >
+                        <option value="">Select a property...</option>
+                    </select>
+                  </div>
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            id="select-value"
+                        >
+                        <option value="">Select value(s)...</option>
+                    </select>
+                  </div>
+                  <div class="col-1 pb-2">
+                    <button type="button" class="btn btn-primary btn-block" onclick="highlightFilter(filter);">Filter</button>
+                  </div>
+                  <div class="col-2 pb-2">
+                    <button type="button" class="btn btn-primary btn-block" onclick="clearFilter(true)">Reset Selection</button>
+                  </div>
+                </div>
+              </div>
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+                  // explicitly using onItemAdd and this function as we need to save multiple values
+                  let updateValueFilter = function() {
+                      return function () {
+                      filter['value'].push(arguments[0])
+                      }
+                  }
+
+                  let valueControl = new TomSelect("#select-value",{
+                      maxItems: null,
+                      valueField: 'id',
+                      labelField: 'title',
+                      searchField: 'title',
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: updateValueFilter()
+                  });
+
+                  let addValues = function() {
+                      return function () {
+                          // clear the current value options and add the selected attribute values
+                          // tom-select handles duplicates
+                          let selectedProperty = arguments[0];
+                          valueControl.clear();
+                          valueControl.clearOptions();
+                          filter['value'] = []
+                          if (filter['item'] === 'node') {
+                              for (let each in allNodes) {
+                                  valueControl.addOption({
+                                      id:allNodes[each][selectedProperty],
+                                      title:allNodes[each][selectedProperty]
+                                  })
+                              }
+                          }
+                          else if (filter['item'] === 'edge') {
+                              for (let each in allEdges) {
+                                  valueControl.addOption({
+                                      id:allEdges[each][selectedProperty],
+                                      title:allEdges[each][selectedProperty]
+                                  })
+                              }
+                          }
+                      }
+                  };
+
+                  let propControl = new TomSelect("#select-property",{
+                      valueField: 'id',
+                      labelField: 'title',
+                      searchField: 'title',
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: addValues()
+                  });
+
+                  let addProperties = function() {
+                      return function () {
+                          // loops through the selected network item and adds the attributes to dropdown
+                          // tom-select handles duplicates
+                          clearFilter(false)
+                          if (arguments[0] === 'edge') {
+                              for (let each in allEdges) {
+                                  if (allEdges.hasOwnProperty(each)) {
+                                      for (let eachProp in allEdges[each]) {
+                                          if (allEdges[each].hasOwnProperty(eachProp)) {
+                                              propControl.addOption({id: eachProp, title: eachProp})
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                          else if (arguments[0] === 'node') {
+                              for (let each in allNodes) {
+                                  if (allNodes.hasOwnProperty(each)) {
+                                      for (let eachProp in allNodes[each]) {
+                                          if (allNodes[each].hasOwnProperty(eachProp)
+                                              && (eachProp !== 'hidden' && eachProp !== 'savedLabel'
+                                                  && eachProp !== 'hiddenLabel')) {
+                                              propControl.addOption({id: eachProp, title: eachProp})
+
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  };
+
+                  let itemControl = new TomSelect("#select-item",{
+                      create: false,
+                      sortField:{
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: addProperties()
+                  });
+
+                  function clearFilter(reset) {
+                      // utility function to clear all the selected filter options
+                      // if reset is set to true, the existing filter will be removed
+                      // else, only the dropdown options are cleared
+                      propControl.clear();
+                      propControl.clearOptions();
+                      valueControl.clear();
+                      valueControl.clearOptions();
+                      filter = {
+                          item : '',
+                          property : '',
+                          value : []
+                      }
+                      if (reset) {
+                          itemControl.clear();
+                          filterHighlight({nodes: []})
+                      }
+                  }
+
+                  function updateFilter(value, key) {
+                      // key could be 'item' or 'property' and value is as selected in dropdown
+                      filter[key] = value
+                  }
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Spanish Shrimp  Carriers", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Spanish Shrimp  Carriers"}, {"color": "#97c2fc", "id": "Faroe Islands Shrimp Shark", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Faroe Islands Shrimp Shark"}, {"color": "#97c2fc", "id": "341411", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "341411"}, {"color": "#97c2fc", "id": "196159", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "196159"}, {"color": "#97c2fc", "id": "755", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "755"}, {"color": "#97c2fc", "id": "77b46bc7-7e31-41a0-973c-e633011d21b0", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "77b46bc7-7e31-41a0-973c-e633011d21b0"}, {"color": "#97c2fc", "id": "6406040", "image": "./img/\u653f\u6cbb\u7ec4\u7ec7.png", "label": "political_organization", "shape": "image", "size": 30, "title": "6406040"}, {"color": "#97c2fc", "id": "55", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "55"}, {"color": "#97c2fc", "id": "750975", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "750975"}, {"color": "#97c2fc", "id": "3404599", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "3404599"}, {"color": "#97c2fc", "id": "85117949", "image": "./img/\u653f\u6cbb\u7ec4\u7ec7.png", "label": "political_organization", "shape": "image", "size": 30, "title": "85117949"}, {"color": "#97c2fc", "id": "3506021", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "3506021"}, {"color": "#97c2fc", "id": "245", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "245"}, {"color": "#97c2fc", "id": "47679", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "47679"}, {"color": "#97c2fc", "id": "425887173", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "425887173"}, {"color": "#97c2fc", "id": "255\u00e2\u0080\u0093273", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "255\u00e2\u0080\u0093273"}, {"color": "#97c2fc", "id": "44956", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "44956"}, {"color": "#97c2fc", "id": "0715f2ea-3d11-4eaa-a0c4-fb3290896531", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "0715f2ea-3d11-4eaa-a0c4-fb3290896531"}, {"color": "#97c2fc", "id": "hours", "image": "./img/\u79fb\u52a8.png", "label": "movement", "shape": "image", "size": 30, "title": "hours"}, {"color": "#97c2fc", "id": "Amanda Mckenzie", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Amanda Mckenzie"}, {"color": "#97c2fc", "id": "2262", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "2262"}, {"color": "#97c2fc", "id": "551", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "551"}, {"color": "#97c2fc", "id": "6731", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "6731"}, {"color": "#97c2fc", "id": "83", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "83"}, {"color": "#97c2fc", "id": "John Gonzalez", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "John Gonzalez"}, {"color": "#97c2fc", "id": "months", "image": "./img/\u79fb\u52a8.png", "label": "movement", "shape": "image", "size": 30, "title": "months"}, {"color": "#97c2fc", "id": "518", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "518"}, {"color": "#97c2fc", "id": "png xi  Line", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "png xi  Line"}, {"color": "#97c2fc", "id": "Playa del Cielo Kga", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Playa del Cielo Kga"}, {"color": "#97c2fc", "id": "235866056", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "235866056"}, {"color": "#97c2fc", "id": "98", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "98"}, {"color": "#97c2fc", "id": "April", "image": "./img/\u4e8b\u4ef6.png", "label": "event", "shape": "image", "size": 30, "title": "April"}, {"color": "#97c2fc", "id": "49", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "49"}, {"color": "#97c2fc", "id": "90562", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "90562"}, {"color": "#97c2fc", "id": "Mar del Oeste Pic", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Mar del Oeste Pic"}, {"color": "#97c2fc", "id": "Coast", "image": "./img/\u8f6e\u8239.png", "label": "vessel", "shape": "image", "size": 30, "title": "Coast"}, {"color": "#97c2fc", "id": "7505050", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "7505050"}, {"color": "#97c2fc", "id": "7691", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "7691"}, {"color": "#97c2fc", "id": "df365f60-c399-42f5-ad38-736145edef5e", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "df365f60-c399-42f5-ad38-736145edef5e"}, {"color": "#97c2fc", "id": "water", "image": "./img/\u8f6e\u8239.png", "label": "vessel", "shape": "image", "size": 30, "title": "water"}, {"color": "#97c2fc", "id": "897", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "897"}, {"color": "#97c2fc", "id": "a7f76d84-4ccf-424a-9bf9-fc20b862b7a8", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "a7f76d84-4ccf-424a-9bf9-fc20b862b7a8"}, {"color": "#97c2fc", "id": "Angela Powers", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Angela Powers"}, {"color": "#97c2fc", "id": "c9b9c344-98ec-40b8-af05-8528e5d82534", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "c9b9c344-98ec-40b8-af05-8528e5d82534"}, {"color": "#97c2fc", "id": "48", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "48"}, {"color": "#97c2fc", "id": "79538", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "79538"}, {"color": "#97c2fc", "id": "43685541", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "43685541"}, {"color": "#97c2fc", "id": "cefaf8b3-3aa2-4c59-b4aa-7974c8e1fe32", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "cefaf8b3-3aa2-4c59-b4aa-7974c8e1fe32"}, {"color": "#97c2fc", "id": "Rybachit Limited Liability Company", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Rybachit Limited Liability Company"}, {"color": "#97c2fc", "id": "ae88562c-5c39-4c15-b128-b4f67f5e5812", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "ae88562c-5c39-4c15-b128-b4f67f5e5812"}, {"color": "#97c2fc", "id": "Jerry Welch", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Jerry Welch"}, {"color": "#97c2fc", "id": "e678510b-947d-455a-8eb0-44d1009682ec", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "e678510b-947d-455a-8eb0-44d1009682ec"}, {"color": "#97c2fc", "id": "33681303", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "33681303"}, {"color": "#97c2fc", "id": "Tshikwea Corp Marine sanctuary", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Tshikwea Corp Marine sanctuary"}, {"color": "#97c2fc", "id": "5ede75fe-f670-4a59-b693-da34e7f6eb47", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "5ede75fe-f670-4a59-b693-da34e7f6eb47"}, {"color": "#97c2fc", "id": "102642", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "102642"}, {"color": "#97c2fc", "id": "Turkish Sword Ltd Export", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Turkish Sword Ltd Export"}, {"color": "#97c2fc", "id": "\u00e2\u0080\u009cHe", "image": "./img/\u4e8b\u4ef6.png", "label": "event", "shape": "image", "size": 30, "title": "\u00e2\u0080\u009cHe"}, {"color": "#97c2fc", "id": "979893388", "image": "./img/s\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "979893388"}, {"color": "#97c2fc", "id": "491", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "491"}, {"color": "#97c2fc", "id": "950296", "image": "./img/\u653f\u6cbb\u7ec4\u7ec7.png", "label": "political_organization", "shape": "image", "size": 30, "title": "950296"}, {"color": "#97c2fc", "id": "David Weber", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "David Weber"}, {"color": "#97c2fc", "id": "f2aee915-d483-4823-a030-9aac5e44c1fe", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "f2aee915-d483-4823-a030-9aac5e44c1fe"}, {"color": "#97c2fc", "id": "Brian Wolfe", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Brian Wolfe"}, {"color": "#97c2fc", "id": "8041aa28-8c50-4083-a528-469c0c6251d9", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "8041aa28-8c50-4083-a528-469c0c6251d9"}, {"color": "#97c2fc", "id": "Frank Guzman", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Frank Guzman"}, {"color": "#97c2fc", "id": "Calvin Salas", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Calvin Salas"}, {"color": "#97c2fc", "id": "89035", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "89035"}, {"color": "#97c2fc", "id": "58623386", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "58623386"}, {"color": "#97c2fc", "id": "3887", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "3887"}, {"color": "#97c2fc", "id": "2ad4f7ea-6f93-4a11-ace7-d7a4234bb991", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "2ad4f7ea-6f93-4a11-ace7-d7a4234bb991"}, {"color": "#97c2fc", "id": "Danielle Camacho", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Danielle Camacho"}, {"color": "#97c2fc", "id": "3782", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "3782"}, {"color": "#97c2fc", "id": "7441", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "7441"}, {"color": "#97c2fc", "id": "Fisheries Animal Industries\u00e2", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Fisheries Animal Industries\u00e2"}, {"color": "#97c2fc", "id": "Chinook", "image": "./img/\u8f6e\u8239.png", "label": "vessel", "shape": "image", "size": 30, "title": "Chinook"}, {"color": "#97c2fc", "id": "767", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "767"}, {"color": "#97c2fc", "id": "2751", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "2751"}, {"color": "#97c2fc", "id": "54217974", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "54217974"}, {"color": "#97c2fc", "id": "6780", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "6780"}, {"color": "#97c2fc", "id": "46", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "46"}, {"color": "#97c2fc", "id": "dec69ea4-1c0c-4b31-b6fe-7d0c7e4b8fd9", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "dec69ea4-1c0c-4b31-b6fe-7d0c7e4b8fd9"}, {"color": "#97c2fc", "id": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "d4947401-8ec7-48b9-a66f-45d983d59e0a"}, {"color": "#97c2fc", "id": "Trevor Brown", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Trevor Brown"}, {"color": "#97c2fc", "id": "Kimberly Roberts", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Kimberly Roberts"}, {"color": "#97c2fc", "id": "FV", "image": "./img/\u8f6e\u8239.png", "label": "vessel", "shape": "image", "size": 30, "title": "FV"}, {"color": "#97c2fc", "id": "FV Snake", "image": "./img/\u8f6e\u8239.png", "label": "vessel", "shape": "image", "size": 30, "title": "FV Snake"}, {"color": "#97c2fc", "id": "FV Viking", "image": "./img/\u8f6e\u8239.png", "label": "vessel", "shape": "image", "size": 30, "title": "FV Viking"}, {"color": "#97c2fc", "id": "FV Thunder", "image": "./img/\u8f6e\u8239.png", "label": "vessel", "shape": "image", "size": 30, "title": "FV Thunder"}, {"color": "#97c2fc", "id": "Aquaculture\u00e2", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Aquaculture\u00e2"}, {"color": "#97c2fc", "id": "4877", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "4877"}, {"color": "#97c2fc", "id": "903311212", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "903311212"}, {"color": "#97c2fc", "id": "1710a32e-7a58-4d7f-9c5e-bf897b7419a3", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "1710a32e-7a58-4d7f-9c5e-bf897b7419a3"}, {"color": "#97c2fc", "id": "Richard Bowers", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Richard Bowers"}, {"color": "#97c2fc", "id": "Joshua Hammond", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Joshua Hammond"}, {"color": "#97c2fc", "id": "75399", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "75399"}, {"color": "#97c2fc", "id": "morning\u00e2\u0080\u0099s", "image": "./img/\u4e8b\u4ef6.png", "label": "event", "shape": "image", "size": 30, "title": "morning\u00e2\u0080\u0099s"}, {"color": "#97c2fc", "id": "Anna Thomas MD", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Anna Thomas MD"}, {"color": "#97c2fc", "id": "Michele Black", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Michele Black"}, {"color": "#97c2fc", "id": "HMS Montrose", "image": "./img/\u8f6e\u8239.png", "label": "vessel", "shape": "image", "size": 30, "title": "HMS Montrose"}, {"color": "#97c2fc", "id": "SIMPComplianceGuide", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "SIMPComplianceGuide"}, {"color": "#97c2fc", "id": "Dana Knapp", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Dana Knapp"}, {"color": "#97c2fc", "id": "\u00e2\u0080\u0098Awacha\u00e2", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "\u00e2\u0080\u0098Awacha\u00e2"}, {"color": "#97c2fc", "id": "Brandon Hughes", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Brandon Hughes"}, {"color": "#97c2fc", "id": "Tamil Nadu Ltd. Liability Co Express", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Tamil Nadu Ltd. Liability Co Express"}, {"color": "#97c2fc", "id": "Ryan Perez", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Ryan Perez"}, {"color": "#97c2fc", "id": "dd3f2822-2964-4d18-92c2-7a6db4b4a9e5", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "dd3f2822-2964-4d18-92c2-7a6db4b4a9e5"}, {"color": "#97c2fc", "id": "6567453", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "6567453"}, {"color": "#97c2fc", "id": "Samuel Dunn", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Samuel Dunn"}, {"color": "#97c2fc", "id": "Jeffrey Strong", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Jeffrey Strong"}, {"color": "#97c2fc", "id": "Angela Chang", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Angela Chang"}, {"color": "#97c2fc", "id": "9345", "image": "./img/\u653f\u6cbb\u7ec4\u7ec7.png", "label": "political_organization", "shape": "image", "size": 30, "title": "9345"}, {"color": "#97c2fc", "id": "Jon White", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Jon White"}, {"color": "#97c2fc", "id": "b1a0ee2a-0e6d-48c2-b639-032e4648fa5c", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "b1a0ee2a-0e6d-48c2-b639-032e4648fa5c"}, {"color": "#97c2fc", "id": "Kevin Burnett", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Kevin Burnett"}, {"color": "#97c2fc", "id": "218148", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "218148"}, {"color": "#97c2fc", "id": "Rebecca Walker", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Rebecca Walker"}, {"color": "#97c2fc", "id": "decfc924-5bdc-4fba-8bbd-bb57d8d478d9", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "decfc924-5bdc-4fba-8bbd-bb57d8d478d9"}, {"color": "#97c2fc", "id": "Amanda Scott", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Amanda Scott"}, {"color": "#97c2fc", "id": "22 Raptor", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "22 Raptor"}, {"color": "#97c2fc", "id": "Estrella del Mar Inc Merchants", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Estrella del Mar Inc Merchants"}, {"color": "#97c2fc", "id": "Gerald Washington", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Gerald Washington"}, {"color": "#97c2fc", "id": "Jessica Kelly", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Jessica Kelly"}, {"color": "#97c2fc", "id": "60017", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "60017"}, {"color": "#97c2fc", "id": "Annette Barrett", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Annette Barrett"}, {"color": "#97c2fc", "id": "\u00e2\u0080\u009cknow", "image": "./img/\u4e8b\u4ef6.png", "label": "event", "shape": "image", "size": 30, "title": "\u00e2\u0080\u009cknow"}, {"color": "#97c2fc", "id": "0c0ae060-2543-4d7e-bed0-e7fab24ba6a5", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "0c0ae060-2543-4d7e-bed0-e7fab24ba6a5"}, {"color": "#97c2fc", "id": "8814", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "8814"}, {"color": "#97c2fc", "id": "2810009", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "2810009"}, {"color": "#97c2fc", "id": "129461", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "129461"}, {"color": "#97c2fc", "id": "Congo Rapids  Marine sanctuary GmbH \u0026 Co. KG Marine sanctuary", "image": "./img/\u516c\u53f8.png", "label": "company", "shape": "image", "size": 30, "title": "Congo Rapids  Marine sanctuary GmbH \u0026 Co. KG Marine sanctuary"}, {"color": "#97c2fc", "id": "46901627", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "46901627"}, {"color": "#97c2fc", "id": "P\u00c3", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "P\u00c3"}, {"color": "#97c2fc", "id": "558", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "558"}, {"color": "#97c2fc", "id": "55674", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "55674"}, {"color": "#97c2fc", "id": "Jamie Robinson", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Jamie Robinson"}, {"color": "#97c2fc", "id": "Nicholas Nguyen", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Nicholas Nguyen"}, {"color": "#97c2fc", "id": "tio MPF\u00e2\u0080\u0099s Special Action Group Combat Organized Crime", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "tio MPF\u00e2\u0080\u0099s Special Action Group Combat Organized Crime"}, {"color": "#97c2fc", "id": "51354617", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "51354617"}, {"color": "#97c2fc", "id": "John Brown", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "John Brown"}, {"color": "#97c2fc", "id": "merida\u00e2", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "merida\u00e2"}, {"color": "#97c2fc", "id": "8251198", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "8251198"}, {"color": "#97c2fc", "id": "8269", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "8269"}, {"color": "#97c2fc", "id": "Vanessa Chandler", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Vanessa Chandler"}, {"color": "#97c2fc", "id": "4524860", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "4524860"}, {"color": "#97c2fc", "id": "three-hour", "image": "./img/\u79fb\u52a8.png", "label": "movement", "shape": "image", "size": 30, "title": "three-hour"}, {"color": "#97c2fc", "id": "19285", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "19285"}, {"color": "#97c2fc", "id": "Courtney Johnson", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Courtney Johnson"}, {"color": "#97c2fc", "id": "353", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "353"}, {"color": "#97c2fc", "id": "60197861", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "60197861"}, {"color": "#97c2fc", "id": "Christopher Cunningham", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Christopher Cunningham"}, {"color": "#97c2fc", "id": "b8567859-bf54-49fd-8332-5775e19c65af", "image": "./img/\u5b9a\u4f4d.png", "label": "location", "shape": "image", "size": 30, "title": "b8567859-bf54-49fd-8332-5775e19c65af"}, {"color": "#97c2fc", "id": "Kelly Mccarthy", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Kelly Mccarthy"}, {"color": "#97c2fc", "id": "Frederick Taylor", "image": "./img/\u4e2a\u4eba.png", "label": "person", "shape": "image", "size": 30, "title": "Frederick Taylor"}, {"color": "#97c2fc", "id": "FishEye International", "image": "./img/\u7ec4\u7ec7.png", "label": "organization", "shape": "image", "size": 30, "title": "FishEye International"}, {"color": "#97c2fc", "id": "Ancla Azul Company Solutions", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Ancla Azul Company Solutions"}, {"color": "#97c2fc", "id": "Federated", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Federated"}, {"color": "#97c2fc", "id": "Lake Mweru A/S Carriers", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Lake Mweru A/S Carriers"}, {"color": "#97c2fc", "id": "SeaSpray Wave SRL Solutions", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "SeaSpray Wave SRL Solutions"}, {"color": "#97c2fc", "id": "Ocean Fisheries Llc", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Ocean Fisheries Llc"}, {"color": "#97c2fc", "id": "Tamil Nadu S.p.A.", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Tamil Nadu S.p.A."}, {"color": "#97c2fc", "id": "Turkish Mussels Ltd. Liability Co Marine biology", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Turkish Mussels Ltd. Liability Co Marine biology"}, {"color": "#97c2fc", "id": "Sonia Fisheries Pvt", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Sonia Fisheries Pvt"}, {"color": "#97c2fc", "id": "DOF\u00e2\u0080\u0099s", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "DOF\u00e2\u0080\u0099s"}, {"color": "#97c2fc", "id": "\u00e2\u0080\u009cGenev", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "\u00e2\u0080\u009cGenev"}, {"color": "#97c2fc", "id": "Oceanfront Oasis Inc Carriers", "image": "./img/s\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Oceanfront Oasis Inc Carriers"}, {"color": "#97c2fc", "id": "Mar de la Vida OJSC", "image": "./img/s\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 50, "title": "Mar de la Vida OJSC"}, {"color": "#97c2fc", "id": "Conduct Joint", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Conduct Joint"}, {"color": "#97c2fc", "id": "Seabreeze Foods Ltd. Corporation United", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Seabreeze Foods Ltd. Corporation United"}, {"color": "#97c2fc", "id": "\u00e2\u0080\u009cCompliance", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "\u00e2\u0080\u009cCompliance"}, {"color": "#97c2fc", "id": "Yu gan BV Investment", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Yu gan BV Investment"}, {"color": "#97c2fc", "id": "DOF\u00e2\u0080\u0099s Long Xing", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "DOF\u00e2\u0080\u0099s Long Xing"}, {"color": "#97c2fc", "id": "Forwading S.A. de C.V.", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Forwading S.A. de C.V."}, {"color": "#97c2fc", "id": "\u00e2\u0080\u009cbracatinga", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "\u00e2\u0080\u009cbracatinga"}, {"color": "#97c2fc", "id": "Mitsubishi", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Mitsubishi"}, {"color": "#97c2fc", "id": "Welding", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Welding"}, {"color": "#97c2fc", "id": "Supreme GmbH \u0026 Co. KG Consulting", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Supreme GmbH \u0026 Co. KG Consulting"}, {"color": "#97c2fc", "id": "Officer Pleads Guilty", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Officer Pleads Guilty"}, {"color": "#97c2fc", "id": "Nagaland Sea Ltd. Liability Co \u0026", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Nagaland Sea Ltd. Liability Co \u0026"}, {"color": "#97c2fc", "id": "Kores De Venezuela C A", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Kores De Venezuela C A"}, {"color": "#97c2fc", "id": "Logistics", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Logistics"}, {"color": "#97c2fc", "id": "80 Percent Arms", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "80 Percent Arms"}, {"color": "#97c2fc", "id": "Sea Seekers Merchants Cruise ship", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Sea Seekers Merchants Cruise ship"}, {"color": "#97c2fc", "id": "C Express", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "C Express"}, {"color": "#97c2fc", "id": "Zerza\u00e2\u0080\u0099s", "image": "./img/\u672a\u77e5.png", "label": "uncertain", "shape": "image", "size": 30, "title": "Zerza\u00e2\u0080\u0099s"}]);
+                  edges = new vis.DataSet([{"arrowStrikethrough": false, "arrows": "to", "from": "Spanish Shrimp  Carriers", "title": "membership", "to": "Ancla Azul Company Solutions", "weight": 0.8986875}, {"arrowStrikethrough": false, "arrows": "to", "from": "Faroe Islands Shrimp Shark", "title": "family_relationship", "to": "Ancla Azul Company Solutions", "weight": 0.80087644}, {"arrowStrikethrough": false, "arrows": "to", "from": "Faroe Islands Shrimp Shark", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.9050164}, {"arrowStrikethrough": false, "arrows": "to", "from": "341411", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8185814}, {"arrowStrikethrough": false, "arrows": "to", "from": "341411", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.95098346}, {"arrowStrikethrough": false, "arrows": "to", "from": "196159", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8195724}, {"arrowStrikethrough": false, "arrows": "to", "from": "77b46bc7-7e31-41a0-973c-e633011d21b0", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.9206723}, {"arrowStrikethrough": false, "arrows": "to", "from": "6406040", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8757013}, {"arrowStrikethrough": false, "arrows": "to", "from": "55", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.82193726}, {"arrowStrikethrough": false, "arrows": "to", "from": "750975", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.83333796}, {"arrowStrikethrough": false, "arrows": "to", "from": "85117949", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.89383733}, {"arrowStrikethrough": false, "arrows": "to", "from": "47679", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.89622176}, {"arrowStrikethrough": false, "arrows": "to", "from": "47679", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8306241}, {"arrowStrikethrough": false, "arrows": "to", "from": "Playa del Cielo Kga", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.94316375}, {"arrowStrikethrough": false, "arrows": "to", "from": "235866056", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.90237296}, {"arrowStrikethrough": false, "arrows": "to", "from": "April", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8114962}, {"arrowStrikethrough": false, "arrows": "to", "from": "49", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8177763}, {"arrowStrikethrough": false, "arrows": "to", "from": "90562", "title": "membership", "to": "Ancla Azul Company Solutions", "weight": 0.8779259}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar del Oeste Pic", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.81550753}, {"arrowStrikethrough": false, "arrows": "to", "from": "Coast", "title": "family_relationship", "to": "Ancla Azul Company Solutions", "weight": 0.8232106}, {"arrowStrikethrough": false, "arrows": "to", "from": "7691", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.837004}, {"arrowStrikethrough": false, "arrows": "to", "from": "df365f60-c399-42f5-ad38-736145edef5e", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.87468237}, {"arrowStrikethrough": false, "arrows": "to", "from": "a7f76d84-4ccf-424a-9bf9-fc20b862b7a8", "title": "membership", "to": "Ancla Azul Company Solutions", "weight": 0.8151709}, {"arrowStrikethrough": false, "arrows": "to", "from": "c9b9c344-98ec-40b8-af05-8528e5d82534", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.816339}, {"arrowStrikethrough": false, "arrows": "to", "from": "79538", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.847372}, {"arrowStrikethrough": false, "arrows": "to", "from": "43685541", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.8108445}, {"arrowStrikethrough": false, "arrows": "to", "from": "cefaf8b3-3aa2-4c59-b4aa-7974c8e1fe32", "title": "membership", "to": "Ancla Azul Company Solutions", "weight": 0.8967301}, {"arrowStrikethrough": false, "arrows": "to", "from": "33681303", "title": "membership", "to": "60017", "weight": 0.9339115}, {"arrowStrikethrough": false, "arrows": "to", "from": "33681303", "title": "partnership", "to": "Annette Barrett", "weight": 0.9448968}, {"arrowStrikethrough": false, "arrows": "to", "from": "33681303", "title": "membership", "to": "\u00e2\u0080\u009cknow", "weight": 0.9299382}, {"arrowStrikethrough": false, "arrows": "to", "from": "33681303", "title": "partnership", "to": "Angela Chang", "weight": 0.9498365}, {"arrowStrikethrough": false, "arrows": "to", "from": "33681303", "title": "partnership", "to": "0c0ae060-2543-4d7e-bed0-e7fab24ba6a5", "weight": 0.9602492}, {"arrowStrikethrough": false, "arrows": "to", "from": "5ede75fe-f670-4a59-b693-da34e7f6eb47", "title": "ownership", "to": "\u00e2\u0080\u009cHe", "weight": 0.8891047}, {"arrowStrikethrough": false, "arrows": "to", "from": "\u00e2\u0080\u009cHe", "title": "membership", "to": "Joshua Hammond", "weight": 0.8355387}, {"arrowStrikethrough": false, "arrows": "to", "from": "491", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.84645414}, {"arrowStrikethrough": false, "arrows": "to", "from": "8041aa28-8c50-4083-a528-469c0c6251d9", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.92485994}, {"arrowStrikethrough": false, "arrows": "to", "from": "Calvin Salas", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8085621}, {"arrowStrikethrough": false, "arrows": "to", "from": "Danielle Camacho", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.8055281}, {"arrowStrikethrough": false, "arrows": "to", "from": "3782", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.9219552}, {"arrowStrikethrough": false, "arrows": "to", "from": "7441", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.91808957}, {"arrowStrikethrough": false, "arrows": "to", "from": "Fisheries Animal Industries\u00e2", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.9002248}, {"arrowStrikethrough": false, "arrows": "to", "from": "767", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.9262667}, {"arrowStrikethrough": false, "arrows": "to", "from": "54217974", "title": "ownership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.802515}, {"arrowStrikethrough": false, "arrows": "to", "from": "46", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.88135463}, {"arrowStrikethrough": false, "arrows": "to", "from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "9345", "weight": 0.8198518}, {"arrowStrikethrough": false, "arrows": "to", "from": "FV", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8235753}, {"arrowStrikethrough": false, "arrows": "to", "from": "FV Snake", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8620263}, {"arrowStrikethrough": false, "arrows": "to", "from": "FV Viking", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.84220123}, {"arrowStrikethrough": false, "arrows": "to", "from": "FV Thunder", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.80413216}, {"arrowStrikethrough": false, "arrows": "to", "from": "903311212", "title": "membership", "to": "33681303", "weight": 0.84119594}, {"arrowStrikethrough": false, "arrows": "to", "from": "903311212", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.8679588}, {"arrowStrikethrough": false, "arrows": "to", "from": "1710a32e-7a58-4d7f-9c5e-bf897b7419a3", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.83090127}, {"arrowStrikethrough": false, "arrows": "to", "from": "Richard Bowers", "title": "ownership", "to": "\u00e2\u0080\u009cHe", "weight": 0.80565405}, {"arrowStrikethrough": false, "arrows": "to", "from": "Michele Black", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.87618357}, {"arrowStrikethrough": false, "arrows": "to", "from": "HMS Montrose", "title": "ownership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.80264485}, {"arrowStrikethrough": false, "arrows": "to", "from": "Samuel Dunn", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.9294425}, {"arrowStrikethrough": false, "arrows": "to", "from": "Jeffrey Strong", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.9082632}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "f2aee915-d483-4823-a030-9aac5e44c1fe", "weight": 0.8645963}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "family_relationship", "to": "John Gonzalez", "weight": 0.8863837}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "Gerald Washington", "weight": 0.90859944}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "Mar de la Vida OJSC", "weight": 0.9243419}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "Jessica Kelly", "weight": 0.90687877}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "Jon White", "weight": 0.9046441}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.95507807}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "33681303", "weight": 0.9128992}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "60017", "weight": 0.9409171}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "ownership", "to": "Angela Powers", "weight": 0.867371}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "ownership", "to": "Jerry Welch", "weight": 0.9136068}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "ownership", "to": "979893388", "weight": 0.819125}, {"arrowStrikethrough": false, "arrows": "to", "from": "9345", "title": "membership", "to": "Ancla Azul Company Solutions", "weight": 0.9354372}, {"arrowStrikethrough": false, "arrows": "to", "from": "Jon White", "title": "family_relationship", "to": "Kevin Burnett", "weight": 0.82134914}, {"arrowStrikethrough": false, "arrows": "to", "from": "Jon White", "title": "family_relationship", "to": "Rebecca Walker", "weight": 0.8024978}, {"arrowStrikethrough": false, "arrows": "to", "from": "Jon White", "title": "family_relationship", "to": "22 Raptor", "weight": 0.8865107}, {"arrowStrikethrough": false, "arrows": "to", "from": "Jon White", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.8501727}, {"arrowStrikethrough": false, "arrows": "to", "from": "b1a0ee2a-0e6d-48c2-b639-032e4648fa5c", "title": "membership", "to": "Jon White", "weight": 0.8104908}, {"arrowStrikethrough": false, "arrows": "to", "from": "Kevin Burnett", "title": "partnership", "to": "Mar de la Vida OJSC", "weight": 0.8123229}, {"arrowStrikethrough": false, "arrows": "to", "from": "218148", "title": "ownership", "to": "Kevin Burnett", "weight": 0.862692}, {"arrowStrikethrough": false, "arrows": "to", "from": "decfc924-5bdc-4fba-8bbd-bb57d8d478d9", "title": "partnership", "to": "Mar de la Vida OJSC", "weight": 0.8027684}, {"arrowStrikethrough": false, "arrows": "to", "from": "decfc924-5bdc-4fba-8bbd-bb57d8d478d9", "title": "ownership", "to": "Kevin Burnett", "weight": 0.87992376}, {"arrowStrikethrough": false, "arrows": "to", "from": "Amanda Scott", "title": "partnership", "to": "22 Raptor", "weight": 0.86107284}, {"arrowStrikethrough": false, "arrows": "to", "from": "Estrella del Mar Inc Merchants", "title": "family_relationship", "to": "22 Raptor", "weight": 0.8606569}, {"arrowStrikethrough": false, "arrows": "to", "from": "Gerald Washington", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.84232104}, {"arrowStrikethrough": false, "arrows": "to", "from": "2810009", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.86921084}, {"arrowStrikethrough": false, "arrows": "to", "from": "129461", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.87625855}, {"arrowStrikethrough": false, "arrows": "to", "from": "Congo Rapids  Marine sanctuary GmbH \u0026 Co. KG Marine sanctuary", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.81473124}, {"arrowStrikethrough": false, "arrows": "to", "from": "P\u00c3", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.91778046}, {"arrowStrikethrough": false, "arrows": "to", "from": "Jamie Robinson", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.8635046}, {"arrowStrikethrough": false, "arrows": "to", "from": "Nicholas Nguyen", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.8541625}, {"arrowStrikethrough": false, "arrows": "to", "from": "tio MPF\u00e2\u0080\u0099s Special Action Group Combat Organized Crime", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.86163795}, {"arrowStrikethrough": false, "arrows": "to", "from": "51354617", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.85662365}, {"arrowStrikethrough": false, "arrows": "to", "from": "4524860", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.92034745}, {"arrowStrikethrough": false, "arrows": "to", "from": "19285", "title": "membership", "to": "Ancla Azul Company Solutions", "weight": 0.9220109}, {"arrowStrikethrough": false, "arrows": "to", "from": "Courtney Johnson", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8097444}, {"arrowStrikethrough": false, "arrows": "to", "from": "Christopher Cunningham", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.95544225}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "Amanda Mckenzie", "weight": 0.84722596}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "Aquaculture\u00e2", "weight": 0.93116504}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "425887173", "weight": 0.8984746}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "2262", "weight": 0.89816225}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "2262", "weight": 0.8081828}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "2751", "weight": 0.9164245}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "47679", "weight": 0.8143497}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "Frederick Taylor", "weight": 0.8406777}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "755", "weight": 0.95013326}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "44956", "weight": 0.85510385}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "3404599", "weight": 0.9219998}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "ae88562c-5c39-4c15-b128-b4f67f5e5812", "weight": 0.8585999}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "255\u00e2\u0080\u0093273", "weight": 0.8015429}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "0715f2ea-3d11-4eaa-a0c4-fb3290896531", "weight": 0.84395957}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "551", "weight": 0.9082307}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "ownership", "to": "897", "weight": 0.8574912}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "hours", "weight": 0.8930595}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "water", "weight": 0.893028}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Tshikwea Corp Marine sanctuary", "weight": 0.83209026}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Rybachit Limited Liability Company", "weight": 0.8531698}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "102642", "weight": 0.9423782}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "ownership", "to": "David Weber", "weight": 0.89996046}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Brian Wolfe", "weight": 0.81463}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Frank Guzman", "weight": 0.8626833}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "DOF\u00e2\u0080\u0099s Long Xing", "weight": 0.8318721}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "2ad4f7ea-6f93-4a11-ace7-d7a4234bb991", "weight": 0.8765087}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "Chinook", "weight": 0.8749863}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "518", "weight": 0.8166661}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "ownership", "to": "DOF\u00e2\u0080\u0099s", "weight": 0.8473304}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "ownership", "to": "43685541", "weight": 0.8189799}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "dec69ea4-1c0c-4b31-b6fe-7d0c7e4b8fd9", "weight": 0.8128039}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Trevor Brown", "weight": 0.8389432}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Kimberly Roberts", "weight": 0.9400762}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "6731", "weight": 0.9034239}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "89035", "weight": 0.8919015}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "4877", "weight": 0.94101536}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "7505050", "weight": 0.8097614}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "75399", "weight": 0.89599574}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "235866056", "weight": 0.82098466}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "98", "weight": 0.8141556}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "ownership", "to": "morning\u00e2\u0080\u0099s", "weight": 0.88136256}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "ownership", "to": "Anna Thomas MD", "weight": 0.80444807}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "SIMPComplianceGuide", "weight": 0.92940617}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "3506021", "weight": 0.87315637}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Dana Knapp", "weight": 0.9309625}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "\u00e2\u0080\u0098Awacha\u00e2", "weight": 0.8778794}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "Brandon Hughes", "weight": 0.82451063}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "950296", "weight": 0.8422315}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "22 Raptor", "weight": 0.8814281}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "46901627", "weight": 0.82834584}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "3887", "weight": 0.87973267}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "John Brown", "weight": 0.9558124}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "55674", "weight": 0.84521955}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "\u00e2\u0080\u009cbracatinga", "weight": 0.9539715}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "merida\u00e2", "weight": 0.9696862}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "8251198", "weight": 0.81126064}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Nagaland Sea Ltd. Liability Co \u0026", "weight": 0.81595045}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "8269", "weight": 0.84960026}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Vanessa Chandler", "weight": 0.97343135}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "558", "weight": 0.8990863}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "e678510b-947d-455a-8eb0-44d1009682ec", "weight": 0.8872657}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "three-hour", "weight": 0.94445705}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "months", "weight": 0.8649194}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "353", "weight": 0.81513214}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "6780", "weight": 0.8109308}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "60197861", "weight": 0.8802337}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Christopher Cunningham", "weight": 0.9410915}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "Faroe Islands Shrimp Shark", "weight": 0.83036757}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "Faroe Islands Shrimp Shark", "weight": 0.9676321}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "979893388", "weight": 0.84869397}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "Sonia Fisheries Pvt", "weight": 0.8764826}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "341411", "weight": 0.8336055}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "family_relationship", "to": "Playa del Cielo Kga", "weight": 0.8596057}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Playa del Cielo Kga", "weight": 0.8877038}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "ownership", "to": "Mar del Oeste Pic", "weight": 0.8702752}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "Mar del Oeste Pic", "weight": 0.81436753}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "png xi  Line", "weight": 0.93826866}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "partnership", "to": "SeaSpray Wave SRL Solutions", "weight": 0.8110135}, {"arrowStrikethrough": false, "arrows": "to", "from": "b8567859-bf54-49fd-8332-5775e19c65af", "title": "membership", "to": "SeaSpray Wave SRL Solutions", "weight": 0.8278672}, {"arrowStrikethrough": false, "arrows": "to", "from": "Kelly Mccarthy", "title": "partnership", "to": "\u00e2\u0080\u009cHe", "weight": 0.892221}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Federated", "weight": 0.7268}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Yu gan BV Investment", "weight": 0.6098}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "58623386", "weight": 0.4758}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Seabreeze Foods Ltd. Corporation United", "weight": 0.1315}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "83", "weight": 0.4487}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "48", "weight": 0.9495}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Mitsubishi", "weight": 0.5134}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Mar de la Vida OJSC", "weight": 0.4604}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "8814", "weight": 0.4789}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "ownership", "to": "903311212", "weight": 0.4353}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Lake Mweru A/S Carriers", "weight": 0.1874}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Tamil Nadu Ltd. Liability Co Express", "weight": 0.7537}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Tamil Nadu Ltd. Liability Co Express", "weight": 0.8127}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Logistics", "weight": 0.8777}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "C Express", "weight": 0.9249}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Welding", "weight": 0.4386}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Supreme GmbH \u0026 Co. KG Consulting", "weight": 0.7404}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Congo Rapids  Marine sanctuary GmbH \u0026 Co. KG Marine sanctuary", "weight": 0.2507}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Conduct Joint", "weight": 0.4922}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "\u00e2\u0080\u009cGenev", "weight": 0.2374}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "80 Percent Arms", "weight": 0.93}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Turkish Sword Ltd Export", "weight": 0.6235}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Officer Pleads Guilty", "weight": 0.665}, {"arrowStrikethrough": false, "arrows": "to", "from": "FishEye International", "title": "membership", "to": "Oceanfront Oasis Inc Carriers", "weight": 0.4461}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "family_relationship", "to": "245", "weight": 0.84313625}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "family_relationship", "to": "551", "weight": 0.9333543}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "family_relationship", "to": "Ryan Perez", "weight": 0.85607153}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "family_relationship", "to": "dd3f2822-2964-4d18-92c2-7a6db4b4a9e5", "weight": 0.8759605}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "family_relationship", "to": "6567453", "weight": 0.9196004}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "membership", "to": "Gerald Washington", "weight": 0.8959766}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "membership", "to": "Mar de la Vida OJSC", "weight": 0.9002734}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "membership", "to": "Jessica Kelly", "weight": 0.8948628}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "membership", "to": "Jon White", "weight": 0.89380264}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.94233364}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "membership", "to": "33681303", "weight": 0.8835466}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "membership", "to": "60017", "weight": 0.92063236}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ancla Azul Company Solutions", "title": "family_relationship", "to": "Mar del Oeste Pic", "weight": 0.92363864}, {"arrowStrikethrough": false, "arrows": "to", "from": "SeaSpray Wave SRL Solutions", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.83138466}, {"arrowStrikethrough": false, "arrows": "to", "from": "SeaSpray Wave SRL Solutions", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.83174783}, {"arrowStrikethrough": false, "arrows": "to", "from": "Ocean Fisheries Llc", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.8838335}, {"arrowStrikethrough": false, "arrows": "to", "from": "Tamil Nadu S.p.A.", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.815887}, {"arrowStrikethrough": false, "arrows": "to", "from": "Turkish Mussels Ltd. Liability Co Marine biology", "title": "family_relationship", "to": "\u00e2\u0080\u009cHe", "weight": 0.8092783}, {"arrowStrikethrough": false, "arrows": "to", "from": "Sonia Fisheries Pvt", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8690837}, {"arrowStrikethrough": false, "arrows": "to", "from": "Sonia Fisheries Pvt", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.96618193}, {"arrowStrikethrough": false, "arrows": "to", "from": "DOF\u00e2\u0080\u0099s", "title": "membership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.88916016}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "partnership", "to": "Kevin Burnett", "weight": 0.8848821}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "ownership", "to": "Jon White", "weight": 0.81111944}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "partnership", "to": "Rebecca Walker", "weight": 0.8822145}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "membership", "to": "Amanda Scott", "weight": 0.812559}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "family_relationship", "to": "22 Raptor", "weight": 0.933199}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "membership", "to": "Gerald Washington", "weight": 0.92325133}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "membership", "to": "Jessica Kelly", "weight": 0.9229233}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.9568139}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "membership", "to": "33681303", "weight": 0.9100236}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "membership", "to": "60017", "weight": 0.9361945}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.86787194}, {"arrowStrikethrough": false, "arrows": "to", "from": "Mar de la Vida OJSC", "title": "membership", "to": "Ancla Azul Company Solutions", "weight": 0.9335016}, {"arrowStrikethrough": false, "arrows": "to", "from": "\u00e2\u0080\u009cCompliance", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8021302}, {"arrowStrikethrough": false, "arrows": "to", "from": "Forwading S.A. de C.V.", "title": "partnership", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8935613}, {"arrowStrikethrough": false, "arrows": "to", "from": "Kores De Venezuela C A", "title": "membership", "to": "Jon White", "weight": 0.80287445}, {"arrowStrikethrough": false, "arrows": "to", "from": "Sea Seekers Merchants Cruise ship", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af", "weight": 0.8606595}, {"arrowStrikethrough": false, "arrows": "to", "from": "Zerza\u00e2\u0080\u0099s", "title": "membership", "to": "\u00e2\u0080\u009cHe", "weight": 0.81339556}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges",
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
